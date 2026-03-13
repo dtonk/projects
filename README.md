@@ -1,2 +1,2 @@
 # projects
-random projects 
+random projects and stuff
