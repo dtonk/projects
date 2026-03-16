@@ -264,8 +264,8 @@ def send_email_alert(new_jobs, config):
     msg["Subject"] = subject
     msg["From"] = smtp_user
     msg["To"] = to_addr
-    msg.attach(MIMEText(body_plain, "plain"))
-    msg.attach(MIMEText(body_html, "html"))
+    msg.attach(MIMEText(body_plain, "plain", "utf-8"))
+    msg.attach(MIMEText(body_html, "html", "utf-8"))
 
     try:
         with smtplib.SMTP(smtp_host, smtp_port) as server:
