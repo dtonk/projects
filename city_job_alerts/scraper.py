@@ -272,7 +272,7 @@ def send_email_alert(new_jobs, config):
             server.ehlo()
             server.starttls()
             server.login(smtp_user, smtp_pass)
-            server.sendmail(smtp_user, [to_addr], msg.as_string())
+            server.send_message(msg)
         print(f"  Alert email sent to {to_addr}")
     except Exception as e:
         print(f"  Failed to send email: {e}", file=sys.stderr)
