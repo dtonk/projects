@@ -214,7 +214,7 @@ def find_new_jobs(matched_jobs, seen_jobs):
 def send_email_alert(new_jobs, config):
     email_cfg = config.get("email", {})
     smtp_host = os.environ.get("SMTP_HOST", email_cfg.get("smtp_host", "smtp.gmail.com"))
-    smtp_port = int(os.environ.get("SMTP_PORT", email_cfg.get("smtp_port", 587)))
+    smtp_port = int(os.environ.get("SMTP_PORT") or email_cfg.get("smtp_port", 587))
     smtp_user = os.environ.get("SMTP_USER", "")
     smtp_pass = os.environ.get("SMTP_PASS", "")
     to_addr = os.environ.get("ALERT_EMAIL", email_cfg.get("to", ""))
