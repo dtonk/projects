@@ -79,53 +79,65 @@ def fetch_page(offset=0):
 def parse_jobs_from_page(html):
     """
     Parse job cards from a page of careers.sf.gov.
-    Each job is an <a class="role-card"> element containing:
-      <h4>            — job title
-      <p class="status">     — posting status / deadline
-      <p class="department"> — department name
-      <p class="details">    — "REF-NUMBER | Employment Type"
-      <p class="job-class">  — "3544-Curator III"
+    Each job is a <div class="row listJob"> containing a Schema.org JobPosting:
+      <span itemprop="title">       — job title
+      <a itemprop="url">            — link (relative href)
+      <meta itemprop="identifier">  — job ID
+      <span itemprop="employmentType"> — employment type
+      <strong>                      — "Department | REF-NUMBER | EmploymentType"
+      <p> (no badge/strong)         — job class label e.g. "1043-IS Engineer-Senior"
+      <span class="badge ...">      — status badge e.g. "Brand new"
     """
     soup = BeautifulSoup(html, "html.parser")
-    cards = soup.find_all("a", class_="role-card")
+    cards = soup.find_all("div", class_="listJob")
     jobs = []
 
     for card in cards:
         try:
-            title_el = card.find("h4")
+            title_el = card.find("span", itemprop="title")
             title = title_el.get_text(strip=True) if title_el else ""
 
-            href = card.get("href", "")
-            id_match = re.search(r"id=(\d+)", href)
-            job_id = id_match.group(1) if id_match else href
+            url_el = card.find("a", itemprop="url")
+            href = url_el.get("href", "") if url_el else ""
+            full_url = href if href.startswith("http") else f"https://careers.sf.gov/{href.lstrip('/')}"
 
-            status_el = card.find("p", class_="status")
-            status = status_el.get_text(strip=True) if status_el else ""
+            id_meta = card.find("meta", itemprop="identifier")
+            job_id = id_meta.get("content", "") if id_meta else ""
+            if not job_id:
+                id_match = re.search(r"id=(\d+)", href)
+                job_id = id_match.group(1) if id_match else href
 
-            dept_el = card.find("p", class_="department")
-            department = dept_el.get_text(strip=True) if dept_el else ""
+            emp_el = card.find("span", itemprop="employmentType")
+            emp_type = emp_el.get_text(strip=True) if emp_el else ""
 
-            details_el = card.find("p", class_="details")
-            details = details_el.get_text(strip=True) if details_el else ""
+            strong_el = card.find("strong")
+            department, ref_num = "", ""
+            if strong_el:
+                parts = [p.strip() for p in strong_el.get_text(strip=True).split("|")]
+                if len(parts) >= 1:
+                    department = parts[0]
+                if len(parts) >= 2:
+                    ref_num = parts[1]
 
-            jobclass_el = card.find("p", class_="job-class")
-            jobclass_text = jobclass_el.get_text(strip=True) if jobclass_el else ""
+            # Job class is in a <p> that contains no badge or strong
+            jobclass_text = ""
+            for p in card.find_all("p"):
+                if not p.find("span", class_=lambda c: c and "badge" in c) and not p.find("strong"):
+                    text = p.get_text(strip=True)
+                    if text:
+                        jobclass_text = text
+                        break
 
-            # "RTF0164117-01038395 | Permanent Exempt"
-            ref_num, emp_type = "", ""
-            if "|" in details:
-                ref_num, emp_type = [x.strip() for x in details.split("|", 1)]
-            else:
-                emp_type = details.strip()
-
-            # "3544-Curator III" → class_code="3544", class_label="3544-Curator III"
             class_code = jobclass_text.split("-")[0].strip() if jobclass_text else ""
+
+            badge_el = card.find("span", class_=lambda c: c and "badge" in c)
+            status = badge_el.get_text(strip=True) if badge_el else ""
 
             jobs.append(
                 {
                     "id": job_id,
                     "title": title,
-                    "url": f"https://careers.sf.gov{href}",
+                    "url": full_url,
                     "class_code": class_code,
                     "class_label": jobclass_text,
                     "employment_type": emp_type,
