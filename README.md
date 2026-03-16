@@ -1,2 +1,2 @@
 # projects
-random projects and stuff
+Doing some computer things 
