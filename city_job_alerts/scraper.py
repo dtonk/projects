@@ -12,8 +12,8 @@ import re
 import smtplib
 import sys
 from datetime import datetime, timezone
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
+import email.policy
+from email.message import EmailMessage
 
 import requests
 from bs4 import BeautifulSoup
@@ -260,12 +260,12 @@ def send_email_alert(new_jobs, config):
 <p><small>Source: <a href="https://careers.sf.gov/">careers.sf.gov</a></small></p>
 </body></html>"""
 
-    msg = MIMEMultipart("alternative")
+    msg = EmailMessage(policy=email.policy.SMTP)
     msg["Subject"] = subject
     msg["From"] = smtp_user
     msg["To"] = to_addr
-    msg.attach(MIMEText(body_plain, "plain", "utf-8"))
-    msg.attach(MIMEText(body_html, "html", "utf-8"))
+    msg.set_content(body_plain)
+    msg.add_alternative(body_html, subtype="html")
 
     try:
         with smtplib.SMTP(smtp_host, smtp_port) as server:
