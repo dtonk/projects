@@ -1,0 +1,53 @@
+name: SF City Job Alerts
+
+on:
+  schedule:
+    # Runs daily at 8:00 AM and 2:00 PM Pacific (UTC-7/8)
+    # Adjust cron times as needed — https://crontab.guru/
+    - cron: "0 15 * * *"   # 8:00 AM PT (UTC+0 15:00)
+    - cron: "0 21 * * *"   # 2:00 PM PT (UTC+0 21:00)
+
+  # Allow manual trigger from the GitHub Actions UI
+  workflow_dispatch:
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write   # needed to commit data files back to the repo
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: city_job_alerts/requirements.txt
+
+      - name: Install dependencies
+        run: pip install -r city_job_alerts/requirements.txt
+
+      - name: Run scraper
+        env:
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASS: ${{ secrets.SMTP_PASS }}
+          SMTP_HOST: ${{ secrets.SMTP_HOST }}       # optional, defaults to smtp.gmail.com
+          SMTP_PORT: ${{ secrets.SMTP_PORT }}       # optional, defaults to 587
+          ALERT_EMAIL: ${{ secrets.ALERT_EMAIL }}
+        run: python city_job_alerts/scraper.py
+
+      - name: Commit updated data files
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add city_job_alerts/data/seen_jobs.json city_job_alerts/data/jobs.json
+          # Only commit if there are changes
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "chore: update job data [$(date -u '+%Y-%m-%d %H:%M UTC')]"
+            git push
+          fi

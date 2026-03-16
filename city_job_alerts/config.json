@@ -1,0 +1,28 @@
+{
+  "employment_type": "Permanent Exempt",
+
+  "job_classes": [
+    "1043",
+    "1044",
+    "1053",
+    "1054",
+    "1063",
+    "1064",
+    "1070",
+    "1071",
+    "1073",
+    "1080"
+  ],
+
+  "email": {
+    "smtp_host": "smtp.gmail.com",
+    "smtp_port": 587,
+    "to": ""
+  },
+
+  "_notes": {
+    "job_classes": "Add/remove SF job class codes (as strings) to filter. Leave the list empty ([]) to match ALL Permanent Exempt jobs.",
+    "email": "Set 'to' here for local runs. For GitHub Actions, set SMTP_USER, SMTP_PASS, and ALERT_EMAIL as repository secrets.",
+    "employment_type": "Change to 'Temporary Exempt', 'Permanent Civil Service', etc. to watch a different type."
+  }
+}
