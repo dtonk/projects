@@ -1,17 +1,6 @@
 {
-  "updated": "2026-03-17T21:35:11.860868+00:00",
+  "updated": "2026-03-18T16:06:24.855003+00:00",
   "jobs": [
-    {
-      "id": "3743990012092436",
-      "title": "Platform Engineer\u2013 Department of Technology \u2013 (1043)",
-      "url": "https://careers.sf.gov/role/?id=3743990012092436",
-      "class_code": "1043",
-      "class_label": "1043-IS Engineer-Senior",
-      "employment_type": "Permanent Exempt",
-      "department": "Technology",
-      "ref_num": "RTF0155090-01154882",
-      "status": "Recently updated : 5d"
-    },
     {
       "id": "3743990012072117",
       "title": "Enterprise Architect (9976) - Department of Technology",
@@ -21,7 +10,7 @@
       "employment_type": "Permanent Exempt",
       "department": "Technology",
       "ref_num": "RTF0160159-01018744",
-      "status": "Recently updated : 6d"
+      "status": "Recently updated : 7d"
     },
     {
       "id": "3743990011896616",
@@ -32,7 +21,7 @@
       "employment_type": "Permanent Exempt",
       "department": "Technology",
       "ref_num": "REF60087O",
-      "status": "17 days"
+      "status": "18 days"
     }
   ]
 }
