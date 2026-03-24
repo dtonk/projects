@@ -1,5 +1,5 @@
 {
-  "updated": "2026-03-24T15:39:13.141587+00:00",
+  "updated": "2026-03-24T15:43:25.361596+00:00",
   "jobs": [
     {
       "id": "3743990012072117",
@@ -22,6 +22,17 @@
       "department": "Technology",
       "ref_num": "REF60087O",
       "released_date": "2026-02-27T16:45:01.112Z"
+    },
+    {
+      "id": "48e3458f-8641-4b8b-ba9f-8fd9b340a796",
+      "title": "City and County of San Francisco 1042-DATA ENGINEER - HR Systems and Analytics Team - Department of Human Resources",
+      "url": "https://jobs.smartrecruiters.com/ni/CityAndCountyOfSanFrancisco1/48e3458f-8641-4b8b-ba9f-8fd9b340a796-1042-data-engineer-hr-systems-and-analytics-team-department-of-human-resources",
+      "class_code": "1042",
+      "class_label": "",
+      "employment_type": "",
+      "department": "",
+      "ref_num": "",
+      "released_date": ""
     }
   ]
 }
