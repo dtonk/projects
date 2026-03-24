@@ -2,167 +2,249 @@
 const VENUE_CENTER = [-122.1447, 37.7486];
 const VENUE_ZOOM = 16;
 
-// Initial overlay bounds — roughly placed over Oakland Zoo area.
-// The image is portrait (2199x3400), so height > width.
-// These coords will be dragged into alignment by the user.
-const INITIAL_CORNERS = {
-  topLeft:     [-122.1500, 37.7530],
-  topRight:    [-122.1400, 37.7530],
-  bottomRight: [-122.1400, 37.7440],
-  bottomLeft:  [-122.1500, 37.7440],
-};
+// Image dimensions (2199x3400 PNG)
+const IMG_W = 2199;
+const IMG_H = 3400;
+const HALF_W = IMG_W / 2;
+const HALF_H = IMG_H / 2;
 
-// Corner keys in the order MapLibre expects for ImageSource coordinates:
-// [top-left, top-right, bottom-right, bottom-left]
-const CORNER_ORDER = ['topLeft', 'topRight', 'bottomRight', 'bottomLeft'];
-const CORNER_LABELS = {
-  topLeft: 'Top-Left',
-  topRight: 'Top-Right',
+// 9 control points:
+// TL  TM  TR
+// LM  C   RM   (C = draggable, moves all 4 inner quad corners together)
+// BL  BM  BR
+const POINT_LABELS = {
+  topLeft:     'Top-Left',
+  topMid:      'Top',
+  topRight:    'Top-Right',
+  leftMid:     'Left',
+  center:      'Center',
+  rightMid:    'Right',
+  bottomLeft:  'Bottom-Left',
+  bottomMid:   'Bottom',
   bottomRight: 'Bottom-Right',
-  bottomLeft: 'Bottom-Left',
 };
 
-// State
-let corners = {};
+// The 4 quadrants, each defined by which 9-point keys form its corners.
+// MapLibre ImageSource order: [top-left, top-right, bottom-right, bottom-left]
+const QUADS = [
+  { id: 'quad-tl', corners: ['topLeft',  'topMid',     'center',      'leftMid'     ], srcX: 0,      srcY: 0,      srcW: HALF_W, srcH: HALF_H },
+  { id: 'quad-tr', corners: ['topMid',   'topRight',   'rightMid',    'center'      ], srcX: HALF_W, srcY: 0,      srcW: HALF_W, srcH: HALF_H },
+  { id: 'quad-br', corners: ['center',   'rightMid',   'bottomRight', 'bottomMid'   ], srcX: HALF_W, srcY: HALF_H, srcW: HALF_W, srcH: HALF_H },
+  { id: 'quad-bl', corners: ['leftMid',  'center',     'bottomMid',   'bottomLeft'  ], srcX: 0,      srcY: HALF_H, srcW: HALF_W, srcH: HALF_H },
+];
+
+// State: geo coords for all 9 points
+let pts = {};
+
+// MapLibre markers for each draggable handle
 let markers = {};
 
-// Initialize map with satellite basemap (ESRI World Imagery, free, no key required)
+// Blob URLs for the 4 sliced quadrant images
+let quadUrls = {};
+
+// ─── Map setup ──────────────────────────────────────────────────────────────
+
 const map = new maplibregl.Map({
   container: 'map',
   style: {
     version: 8,
     sources: {
-      'satellite': {
+      satellite: {
         type: 'raster',
-        tiles: [
-          'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
-        ],
+        tiles: ['https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'],
         tileSize: 256,
         attribution: '&copy; Esri, Maxar, Earthstar Geographics',
-      }
+      },
     },
-    layers: [{
-      id: 'satellite-layer',
-      type: 'raster',
-      source: 'satellite',
-      minzoom: 0,
-      maxzoom: 19,
-    }]
+    layers: [{ id: 'satellite-layer', type: 'raster', source: 'satellite', minzoom: 0, maxzoom: 19 }],
   },
   center: VENUE_CENTER,
   zoom: VENUE_ZOOM,
 });
 
-// Read the PDF overlay's screen corners and convert to map coordinates
-function getCornersFromOverlay() {
+// ─── Geometry helpers ────────────────────────────────────────────────────────
+
+function midpoint(a, b) {
+  return [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
+}
+
+// Initialise pts from the CSS overlay's screen position
+function initPointsFromOverlay() {
   const rect = pdfOverlay.getBoundingClientRect();
-  const screenCorners = {
-    topLeft:     [rect.left, rect.top],
-    topRight:    [rect.right, rect.top],
-    bottomRight: [rect.right, rect.bottom],
-    bottomLeft:  [rect.left, rect.bottom],
-  };
-  const geoCorners = {};
-  CORNER_ORDER.forEach(key => {
-    const lngLat = map.unproject(screenCorners[key]);
-    geoCorners[key] = [lngLat.lng, lngLat.lat];
-  });
-  return geoCorners;
-}
 
-// Convert corners to the coordinate array MapLibre ImageSource expects
-function getCoordinatesArray() {
-  return CORNER_ORDER.map(key => corners[key]);
-}
-
-// Update the ImageSource when a corner marker is dragged
-function updateOverlay() {
-  const source = map.getSource('venue-map');
-  if (source) {
-    source.setCoordinates(getCoordinatesArray());
+  function unproj(x, y) {
+    const ll = map.unproject([x, y]);
+    return [ll.lng, ll.lat];
   }
+
+  const tl = unproj(rect.left,  rect.top);
+  const tr = unproj(rect.right, rect.top);
+  const br = unproj(rect.right, rect.bottom);
+  const bl = unproj(rect.left,  rect.bottom);
+
+  pts.topLeft     = tl;
+  pts.topRight    = tr;
+  pts.bottomRight = br;
+  pts.bottomLeft  = bl;
+  pts.topMid      = midpoint(tl, tr);
+  pts.rightMid    = midpoint(tr, br);
+  pts.bottomMid   = midpoint(br, bl);
+  pts.leftMid     = midpoint(bl, tl);
+  pts.center      = midpoint(midpoint(tl, br), midpoint(tr, bl));
 }
 
-// Transition from CSS overlay to MapLibre ImageSource for step 2
-function enterAlignmentMode() {
-  // Snap corners to where the CSS overlay is on screen
-  corners = getCornersFromOverlay();
+// ─── Image slicing ───────────────────────────────────────────────────────────
 
-  // Hide the CSS overlay
-  pdfOverlay.style.display = 'none';
+// Slice the full image into 4 quadrant blobs and store their URLs.
+// Returns a Promise that resolves when all blobs are ready.
+function sliceImage() {
+  return new Promise((resolve, reject) => {
+    // Revoke any previous blob URLs
+    Object.values(quadUrls).forEach(url => URL.revokeObjectURL(url));
+    quadUrls = {};
 
-  // Add the PDF as a MapLibre ImageSource so it stretches with corner drags
-  if (map.getSource('venue-map')) {
-    map.getSource('venue-map').setCoordinates(getCoordinatesArray());
-  } else {
-    map.addSource('venue-map', {
+    const img = new Image();
+    img.onload = () => {
+      const pending = QUADS.length;
+      let done = 0;
+
+      QUADS.forEach(quad => {
+        const canvas = document.createElement('canvas');
+        canvas.width  = quad.srcW;
+        canvas.height = quad.srcH;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, quad.srcX, quad.srcY, quad.srcW, quad.srcH, 0, 0, quad.srcW, quad.srcH);
+
+        canvas.toBlob(blob => {
+          quadUrls[quad.id] = URL.createObjectURL(blob);
+          done++;
+          if (done === pending) resolve();
+        }, 'image/png');
+      });
+    };
+    img.onerror = reject;
+    img.src = 'assets/oakland_zoo_map.png';
+  });
+}
+
+// ─── MapLibre quad sources/layers ────────────────────────────────────────────
+
+function getQuadCoords(quad) {
+  return quad.corners.map(key => pts[key]);
+}
+
+function addQuadLayers(opacity) {
+  QUADS.forEach(quad => {
+    map.addSource(quad.id, {
       type: 'image',
-      url: 'assets/oakland_zoo_map.png',
-      coordinates: getCoordinatesArray(),
+      url: quadUrls[quad.id],
+      coordinates: getQuadCoords(quad),
     });
     map.addLayer({
-      id: 'venue-overlay',
+      id: quad.id + '-layer',
       type: 'raster',
-      source: 'venue-map',
-      paint: { 'raster-opacity': 0.7 },
+      source: quad.id,
+      paint: { 'raster-opacity': opacity },
     });
-  }
+  });
+}
 
-  // Create or reposition corner markers
-  CORNER_ORDER.forEach(key => {
+function removeQuadLayers() {
+  QUADS.forEach(quad => {
+    if (map.getLayer(quad.id + '-layer')) map.removeLayer(quad.id + '-layer');
+    if (map.getSource(quad.id))           map.removeSource(quad.id);
+  });
+}
+
+function updateQuadCoords() {
+  QUADS.forEach(quad => {
+    const source = map.getSource(quad.id);
+    if (source) source.setCoordinates(getQuadCoords(quad));
+  });
+}
+
+function setQuadOpacity(opacity) {
+  QUADS.forEach(quad => {
+    if (map.getLayer(quad.id + '-layer')) {
+      map.setPaintProperty(quad.id + '-layer', 'raster-opacity', opacity);
+    }
+  });
+}
+
+// ─── Markers ─────────────────────────────────────────────────────────────────
+
+function createMarkers() {
+  Object.keys(POINT_LABELS).forEach(key => {
     if (markers[key]) {
-      markers[key].setLngLat(corners[key]);
+      markers[key].setLngLat(pts[key]);
       markers[key].getElement().style.display = '';
       return;
     }
 
+    const isCorner = ['topLeft', 'topRight', 'bottomLeft', 'bottomRight'].includes(key);
+    const isCenter = key === 'center';
+
     const el = document.createElement('div');
-    el.className = 'corner-handle';
+    el.className = isCenter ? 'center-handle' : isCorner ? 'corner-handle' : 'mid-handle';
 
     const label = document.createElement('div');
     label.className = 'corner-label';
-    label.textContent = CORNER_LABELS[key];
+    label.textContent = POINT_LABELS[key];
     el.appendChild(label);
 
-    const marker = new maplibregl.Marker({
-      element: el,
-      draggable: true,
-      anchor: 'center',
-    })
-      .setLngLat(corners[key])
+    const marker = new maplibregl.Marker({ element: el, draggable: true, anchor: 'center' })
+      .setLngLat(pts[key])
       .addTo(map);
 
     marker.on('drag', () => {
-      const lngLat = marker.getLngLat();
-      corners[key] = [lngLat.lng, lngLat.lat];
-      updateOverlay();
+      const ll = marker.getLngLat();
+      pts[key] = [ll.lng, ll.lat];
+      updateQuadCoords();
     });
 
     markers[key] = marker;
   });
 }
 
-// Transition back to CSS overlay for step 1
-function exitAlignmentMode() {
-  // Hide markers
+function hideMarkers() {
   Object.values(markers).forEach(m => {
     m.getElement().style.display = 'none';
   });
+}
 
-  // Remove the MapLibre image layer/source
-  if (map.getLayer('venue-overlay')) map.removeLayer('venue-overlay');
-  if (map.getSource('venue-map')) map.removeSource('venue-map');
+// ─── Step transitions ────────────────────────────────────────────────────────
 
-  // Show the CSS overlay again
+const pdfOverlay  = document.getElementById('pdf-overlay');
+const loadingMsg  = document.getElementById('loading-msg');
+const step1DoneBtn = document.getElementById('step-1-done');
+
+async function enterAlignmentMode() {
+  step1DoneBtn.disabled = true;
+  loadingMsg.style.display = 'block';
+
+  initPointsFromOverlay();
+  await sliceImage();
+  const opacity = parseInt(opacitySlider.value) / 100;
+  addQuadLayers(opacity);
+  createMarkers();
+
+  pdfOverlay.style.display = 'none';
+  loadingMsg.style.display = 'none';
+  step1DoneBtn.disabled = false;
+}
+
+function exitAlignmentMode() {
+  hideMarkers();
+  removeQuadLayers();
   pdfOverlay.style.display = '';
 }
 
-// PDF overlay element
-const pdfOverlay = document.getElementById('pdf-overlay');
+// ─── UI controls ─────────────────────────────────────────────────────────────
 
-// Rotation slider (Step 1)
 const rotationSlider = document.getElementById('rotation-slider');
-const rotationValue = document.getElementById('rotation-value');
+const rotationValue  = document.getElementById('rotation-value');
+const opacitySlider  = document.getElementById('opacity-slider');
+const opacityValue   = document.getElementById('opacity-value');
 
 rotationSlider.addEventListener('input', (e) => {
   const bearing = parseInt(e.target.value);
@@ -170,9 +252,8 @@ rotationSlider.addEventListener('input', (e) => {
   map.setBearing(bearing);
 });
 
-// Step transitions
-document.getElementById('step-1-done').addEventListener('click', () => {
-  enterAlignmentMode();
+step1DoneBtn.addEventListener('click', async () => {
+  await enterAlignmentMode();
   document.getElementById('step-1').classList.remove('active-step');
   document.getElementById('step-2').classList.add('active-step');
 });
@@ -183,51 +264,37 @@ document.getElementById('back-btn').addEventListener('click', () => {
   document.getElementById('step-1').classList.add('active-step');
 });
 
-// Opacity slider (Step 2)
-const opacitySlider = document.getElementById('opacity-slider');
-const opacityValue = document.getElementById('opacity-value');
-
 opacitySlider.addEventListener('input', (e) => {
   const val = parseInt(e.target.value);
   opacityValue.textContent = val + '%';
-  // Step 1: control CSS overlay opacity. Step 2: control MapLibre layer opacity.
   pdfOverlay.style.opacity = val / 100;
-  if (map.getLayer('venue-overlay')) {
-    map.setPaintProperty('venue-overlay', 'raster-opacity', val / 100);
-  }
+  setQuadOpacity(val / 100);
 });
 
-// "Looks Good" button — logs the control points
-document.getElementById('confirm-btn').addEventListener('click', () => {
-  // Build control point data: map pixel corners → lat/lon
-  // For a 2199x3400 image, the pixel corners are:
-  const imageWidth = 2199;
-  const imageHeight = 3400;
+// ─── Confirm / Reset ─────────────────────────────────────────────────────────
 
+document.getElementById('confirm-btn').addEventListener('click', () => {
   const controlPoints = [
-    { corner: 'topLeft',     px: 0,          py: 0,           lng: corners.topLeft[0],     lat: corners.topLeft[1] },
-    { corner: 'topRight',    px: imageWidth,  py: 0,           lng: corners.topRight[0],    lat: corners.topRight[1] },
-    { corner: 'bottomRight', px: imageWidth,  py: imageHeight, lng: corners.bottomRight[0], lat: corners.bottomRight[1] },
-    { corner: 'bottomLeft',  px: 0,          py: imageHeight, lng: corners.bottomLeft[0],  lat: corners.bottomLeft[1] },
+    { point: 'topLeft',     px: 0,      py: 0,      lng: pts.topLeft[0],     lat: pts.topLeft[1] },
+    { point: 'topMid',      px: HALF_W, py: 0,      lng: pts.topMid[0],      lat: pts.topMid[1] },
+    { point: 'topRight',    px: IMG_W,  py: 0,      lng: pts.topRight[0],    lat: pts.topRight[1] },
+    { point: 'leftMid',     px: 0,      py: HALF_H, lng: pts.leftMid[0],     lat: pts.leftMid[1] },
+    { point: 'center',      px: HALF_W, py: HALF_H, lng: pts.center[0],      lat: pts.center[1] },
+    { point: 'rightMid',    px: IMG_W,  py: HALF_H, lng: pts.rightMid[0],    lat: pts.rightMid[1] },
+    { point: 'bottomLeft',  px: 0,      py: IMG_H,  lng: pts.bottomLeft[0],  lat: pts.bottomLeft[1] },
+    { point: 'bottomMid',   px: HALF_W, py: IMG_H,  lng: pts.bottomMid[0],   lat: pts.bottomMid[1] },
+    { point: 'bottomRight', px: IMG_W,  py: IMG_H,  lng: pts.bottomRight[0], lat: pts.bottomRight[1] },
   ];
 
-  const output = {
-    bearing: map.getBearing(),
-    controlPoints,
-  };
+  const output = { bearing: map.getBearing(), controlPoints };
 
-  const resultsDiv = document.getElementById('results');
-  const resultsData = document.getElementById('results-data');
-
-  resultsDiv.classList.remove('hidden');
-  resultsData.textContent = JSON.stringify(output, null, 2);
+  document.getElementById('results').classList.remove('hidden');
+  document.getElementById('results-data').textContent = JSON.stringify(output, null, 2);
 
   console.log('Control Points:', controlPoints);
-  console.log('GDAL command:');
-  console.log(buildGdalCommand(controlPoints));
+  console.log('GDAL command:\n' + buildGdalCommand(controlPoints));
 });
 
-// Reset button
 document.getElementById('reset-btn').addEventListener('click', () => {
   exitAlignmentMode();
   map.setBearing(0);
@@ -238,12 +305,12 @@ document.getElementById('reset-btn').addEventListener('click', () => {
   document.getElementById('results').classList.add('hidden');
 });
 
-// Build a sample GDAL command from the control points (for reference/debugging)
+// ─── GDAL output ─────────────────────────────────────────────────────────────
+
 function buildGdalCommand(controlPoints) {
   const gcpArgs = controlPoints
     .map(cp => `-gcp ${cp.px} ${cp.py} ${cp.lng} ${cp.lat}`)
     .join(' ');
-
   return [
     `gdal_translate ${gcpArgs} input.png gcps.tif`,
     `gdalwarp -tps -r bilinear -t_srs EPSG:4326 gcps.tif warped.tif`,

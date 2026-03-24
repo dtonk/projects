@@ -212,6 +212,49 @@ body {
   cursor: grabbing;
 }
 
+/* Midpoint handle markers — diamond shape, orange */
+.mid-handle {
+  width: 18px;
+  height: 18px;
+  background: #f97316;
+  border: 2px solid white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  cursor: grab;
+  transform: rotate(45deg);
+}
+
+.mid-handle:active {
+  cursor: grabbing;
+}
+
+/* Rotate the label back to upright inside the diamond */
+.mid-handle .corner-label {
+  transform: translateX(-50%) rotate(-45deg);
+}
+
+/* Center handle — green circle, slightly larger */
+.center-handle {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #16a34a;
+  border: 3px solid white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  cursor: grab;
+}
+
+.center-handle:active {
+  cursor: grabbing;
+}
+
+#loading-msg {
+  display: none;
+  font-size: 13px;
+  color: #666;
+  margin-top: 8px;
+  text-align: center;
+}
+
 .corner-label {
   position: absolute;
   top: -22px;
