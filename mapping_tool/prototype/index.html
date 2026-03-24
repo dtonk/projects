@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VenueMap — Georeferencing Prototype</title>
+  <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="map"></div>
+
+  <!-- PDF overlay — stays fixed/vertical, doesn't rotate with map -->
+  <img id="pdf-overlay" src="assets/oakland_zoo_map.png" alt="Venue map">
+
+  <!-- Control panel -->
+  <div id="controls">
+    <h2>VenueMap — Align Your Map</h2>
+
+    <!-- Opacity slider — always visible -->
+    <div class="control-group">
+      <label for="opacity-slider">PDF Overlay Opacity</label>
+      <input type="range" id="opacity-slider" min="0" max="100" value="40">
+      <span id="opacity-value">40%</span>
+    </div>
+
+    <!-- Step 1: Rotate -->
+    <div id="step-1" class="step active-step">
+      <div class="step-header">
+        <span class="step-number">1</span>
+        <span class="step-title">Orient the satellite view</span>
+      </div>
+      <p class="instructions">
+        Spin the satellite map underneath your PDF until the features
+        line up. Your PDF stays fixed — only the satellite rotates.
+      </p>
+      <div class="control-group">
+        <label for="rotation-slider">Rotation</label>
+        <input type="range" id="rotation-slider" min="-180" max="180" value="0" step="1">
+        <span id="rotation-value">0°</span>
+      </div>
+      <button id="step-1-done" class="btn-primary">Orientation Set</button>
+    </div>
+
+    <!-- Step 2: Drag corners -->
+    <div id="step-2" class="step">
+      <div class="step-header">
+        <span class="step-number">2</span>
+        <span class="step-title">Align the corners</span>
+      </div>
+      <p class="instructions">
+        Drag the <strong>4 corner handles</strong> on the map to match the
+        corners of your PDF overlay — Top-Left, Top-Right, Bottom-Right,
+        Bottom-Left.
+      </p>
+      <button id="confirm-btn" class="btn-primary">Looks Good!</button>
+      <button id="reset-btn" class="btn-secondary">Reset Position</button>
+      <button id="back-btn" class="btn-secondary">Back to Rotation</button>
+    </div>
+
+    <!-- Results panel (hidden until confirm) -->
+    <div id="results" class="hidden">
+      <h3>Control Points</h3>
+      <pre id="results-data"></pre>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
