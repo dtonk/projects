@@ -1,27 +1,27 @@
 {
-  "updated": "2026-03-23T21:33:29.979960+00:00",
+  "updated": "2026-03-24T15:13:54.856618+00:00",
   "jobs": [
     {
       "id": "3743990012072117",
       "title": "Enterprise Architect (9976) - Department of Technology",
-      "url": "https://careers.sf.gov/role/?id=3743990012072117",
+      "url": "https://jobs.smartrecruiters.com/CityAndCountyOfSanFrancisco1/3743990012072117",
       "class_code": "9976",
       "class_label": "9976-Technology Expert I",
       "employment_type": "Permanent Exempt",
       "department": "Technology",
       "ref_num": "RTF0160159-01018744",
-      "status": "12 days"
+      "released_date": "2026-03-10T21:33:26.591Z"
     },
     {
       "id": "3743990011896616",
       "title": "Principal System Integration Engineer (Enterprise Systems), Oracle BPEL / SOA Integration (1064) \u2013 Department of Technology",
-      "url": "https://careers.sf.gov/role/?id=3743990011896616",
+      "url": "https://jobs.smartrecruiters.com/CityAndCountyOfSanFrancisco1/3743990011896616",
       "class_code": "1064",
       "class_label": "1064-IS Programmer Analyst-Principal",
       "employment_type": "Permanent Exempt",
       "department": "Technology",
       "ref_num": "REF60087O",
-      "status": "23 days"
+      "released_date": "2026-02-27T16:45:01.112Z"
     }
   ]
 }

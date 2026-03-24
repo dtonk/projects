@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
 SF City Job Alerts
-Scrapes careers.sf.gov for new job postings matching configured job classes
-and employment type "Permanent Exempt". Sends email alerts for new postings
+Queries the SmartRecruiters public API for SF City job postings matching
+configured job classes and fill type. Sends email alerts for new postings
 and saves current matches to data/jobs.json for website display.
 """
 
@@ -16,14 +16,14 @@ import email.policy
 from email.message import EmailMessage
 
 import requests
-from bs4 import BeautifulSoup
 
-BASE_URL = "https://careers.sf.gov/"
+API_URL = "https://api.smartrecruiters.com/v1/companies/CityAndCountyOfSanFrancisco1/postings"
+JOB_URL_BASE = "https://jobs.smartrecruiters.com/CityAndCountyOfSanFrancisco1"
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
     "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
 }
-PAGE_SIZE = 15
+PAGE_SIZE = 100
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 CONFIG_PATH = os.path.join(SCRIPT_DIR, "config.json")
@@ -65,105 +65,64 @@ def save_current_jobs(jobs):
 
 
 # ---------------------------------------------------------------------------
-# Scraping
+# API fetching
 # ---------------------------------------------------------------------------
 
-def fetch_page(offset=0):
-    resp = requests.get(
-        BASE_URL, params={"offset": offset}, headers=HEADERS, timeout=30
-    )
-    resp.raise_for_status()
-    return resp.text
+def get_custom_field(custom_fields, label):
+    for f in custom_fields:
+        if f.get("fieldLabel") == label:
+            return f.get("valueLabel", "")
+    return ""
 
 
-def parse_jobs_from_page(html):
-    """
-    Parse job cards from a page of careers.sf.gov.
-    Each job is a <div class="row listJob"> containing a Schema.org JobPosting:
-      <span itemprop="title">       — job title
-      <a itemprop="url">            — link (relative href)
-      <meta itemprop="identifier">  — job ID
-      <span itemprop="employmentType"> — employment type
-      <strong>                      — "Department | REF-NUMBER | EmploymentType"
-      <p> (no badge/strong)         — job class label e.g. "1043-IS Engineer-Senior"
-      <span class="badge ...">      — status badge e.g. "Brand new"
-    """
-    soup = BeautifulSoup(html, "html.parser")
-    cards = soup.find_all("div", class_="listJob")
-    jobs = []
+def parse_job(raw):
+    custom_fields = raw.get("customField", [])
 
-    for card in cards:
-        try:
-            title_el = card.find("span", itemprop="title")
-            title = title_el.get_text(strip=True) if title_el else ""
+    class_label = get_custom_field(custom_fields, "Job Code and Title")
+    class_code = class_label.split("-")[0].strip() if class_label else ""
 
-            url_el = card.find("a", itemprop="url")
-            href = url_el.get("href", "") if url_el else ""
-            full_url = href if href.startswith("http") else f"https://careers.sf.gov/{href.lstrip('/')}"
+    fill_type = get_custom_field(custom_fields, "Fill Type")
 
-            id_meta = card.find("meta", itemprop="identifier")
-            job_id = id_meta.get("content", "") if id_meta else ""
-            if not job_id:
-                id_match = re.search(r"id=(\d+)", href)
-                job_id = id_match.group(1) if id_match else href
+    # customField "Department" is more specific than top-level department.label
+    department = get_custom_field(custom_fields, "Department") or \
+                 raw.get("department", {}).get("label", "")
 
-            emp_el = card.find("span", itemprop="employmentType")
-            emp_type = emp_el.get_text(strip=True) if emp_el else ""
+    job_id = str(raw.get("id", ""))
 
-            strong_el = card.find("strong")
-            department, ref_num = "", ""
-            if strong_el:
-                parts = [p.strip() for p in strong_el.get_text(strip=True).split("|")]
-                if len(parts) >= 1:
-                    department = parts[0]
-                if len(parts) >= 2:
-                    ref_num = parts[1]
-
-            # Job class is in a <p> that contains no badge or strong
-            jobclass_text = ""
-            for p in card.find_all("p"):
-                if not p.find("span", class_=lambda c: c and "badge" in c) and not p.find("strong"):
-                    text = p.get_text(strip=True)
-                    if text:
-                        jobclass_text = text
-                        break
-
-            class_code = jobclass_text.split("-")[0].strip() if jobclass_text else ""
-
-            badge_el = card.find("span", class_=lambda c: c and "badge" in c)
-            status = badge_el.get_text(strip=True) if badge_el else ""
-
-            jobs.append(
-                {
-                    "id": job_id,
-                    "title": title,
-                    "url": full_url,
-                    "class_code": class_code,
-                    "class_label": jobclass_text,
-                    "employment_type": emp_type,
-                    "department": department,
-                    "ref_num": ref_num,
-                    "status": status,
-                }
-            )
-        except Exception as e:
-            print(f"Warning: failed to parse job card: {e}", file=sys.stderr)
-
-    has_next = bool(soup.find("a", string=lambda t: t and "Next" in t))
-    return jobs, has_next
+    return {
+        "id": job_id,
+        "title": raw.get("name", ""),
+        "url": f"{JOB_URL_BASE}/{job_id}",
+        "class_code": class_code,
+        "class_label": class_label,
+        "employment_type": fill_type,
+        "department": department,
+        "ref_num": raw.get("refNumber", ""),
+        "released_date": raw.get("releasedDate", ""),
+    }
 
 
 def fetch_all_jobs():
     all_jobs = []
     offset = 0
     while True:
-        print(f"  Fetching page offset={offset} ...")
-        html = fetch_page(offset)
-        jobs, has_next = parse_jobs_from_page(html)
-        all_jobs.extend(jobs)
-        if not has_next:
+        print(f"  Fetching jobs offset={offset} ...")
+        resp = requests.get(
+            API_URL,
+            params={"limit": PAGE_SIZE, "offset": offset},
+            headers=HEADERS,
+            timeout=30,
+        )
+        resp.raise_for_status()
+        data = resp.json()
+        content = data.get("content", [])
+        if not content:
             break
-        offset += PAGE_SIZE
+        all_jobs.extend(parse_job(r) for r in content)
+        total = data.get("totalFound", 0)
+        offset += len(content)
+        if offset >= total:
+            break
     print(f"  Total jobs fetched: {len(all_jobs)}")
     return all_jobs
 
@@ -173,7 +132,7 @@ def fetch_all_jobs():
 # ---------------------------------------------------------------------------
 
 def filter_jobs(jobs, config):
-    """Keep only jobs matching the configured employment type and job classes."""
+    """Keep only jobs matching the configured fill type and job classes."""
     target_type = config.get("employment_type", "Permanent Exempt").strip()
     target_classes = {str(c).strip() for c in config.get("job_classes", [])}
 
@@ -181,7 +140,6 @@ def filter_jobs(jobs, config):
     for job in jobs:
         if job["employment_type"] != target_type:
             continue
-        # If job_classes list is empty, match all classes of the right type
         if target_classes and job["class_code"] not in target_classes:
             continue
         matched.append(job)
@@ -233,7 +191,7 @@ def send_email_alert(new_jobs, config):
             f"  {job['title']}",
             f"  Class:      {job['class_label']}",
             f"  Department: {job['department']}",
-            f"  Status:     {job['status']}",
+            f"  Posted:     {job['released_date']}",
             f"  URL:        {job['url']}",
             "",
         ]
@@ -245,7 +203,7 @@ def send_email_alert(new_jobs, config):
         f"<td><a href='{j['url']}'>{j['title']}</a></td>"
         f"<td>{j['class_label']}</td>"
         f"<td>{j['department']}</td>"
-        f"<td>{j['status']}</td>"
+        f"<td>{j['released_date'][:10]}</td>"
         f"</tr>"
         for j in new_jobs
     )
@@ -253,11 +211,11 @@ def send_email_alert(new_jobs, config):
 <h2>SF City Job Alerts &mdash; {len(new_jobs)} new posting(s)</h2>
 <table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse">
   <tr style="background:#eee">
-    <th>Title</th><th>Class</th><th>Department</th><th>Status</th>
+    <th>Title</th><th>Class</th><th>Department</th><th>Posted</th>
   </tr>
   {rows}
 </table>
-<p><small>Source: <a href="https://careers.sf.gov/">careers.sf.gov</a></small></p>
+<p><small>Source: <a href="https://jobs.smartrecruiters.com/CityAndCountyOfSanFrancisco1">SmartRecruiters</a></small></p>
 </body></html>"""
 
     msg = EmailMessage(policy=email.policy.SMTP)
@@ -288,7 +246,7 @@ def main():
     config = load_config()
     seen_jobs = load_seen_jobs()
 
-    print("\nFetching jobs from careers.sf.gov ...")
+    print("\nFetching jobs from SmartRecruiters API ...")
     all_jobs = fetch_all_jobs()
 
     print("\nFiltering ...")
@@ -301,7 +259,6 @@ def main():
     new_jobs = find_new_jobs(matched_jobs, seen_jobs)
     print(f"  New since last run: {len(new_jobs)}")
 
-    # Always write current matches for website / manual review
     save_current_jobs(matched_jobs)
     save_seen_jobs(seen_jobs)
 
@@ -310,7 +267,7 @@ def main():
         for job in new_jobs:
             print(f"  [{job['class_code']}] {job['title']}")
             print(f"    Dept:   {job['department']}")
-            print(f"    Status: {job['status']}")
+            print(f"    Posted: {job['released_date'][:10]}")
             print(f"    URL:    {job['url']}")
         print()
         send_email_alert(new_jobs, config)
