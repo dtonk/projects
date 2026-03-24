@@ -128,6 +128,52 @@ def fetch_all_jobs():
 
 
 # ---------------------------------------------------------------------------
+# Watched (unlisted) jobs
+# ---------------------------------------------------------------------------
+
+def fetch_watched_jobs(watch_urls):
+    """Fetch job info from manually-watched URLs (e.g. /ni/ unlisted postings)."""
+    watched = []
+    for url in watch_urls:
+        clean_url = url.split("?")[0]
+        match = re.search(r"/([0-9a-f-]{36})-(.+?)$", clean_url)
+        if not match:
+            print(f"  Skipping invalid watch URL: {url}")
+            continue
+        job_uuid = match.group(1)
+        slug = match.group(2)
+        slug_parts = slug.split("-")
+        class_code = slug_parts[0] if slug_parts[0].isdigit() else ""
+
+        try:
+            resp = requests.get(clean_url, headers=HEADERS, timeout=30)
+            if resp.status_code != 200:
+                print(f"  Watch URL returned {resp.status_code}, skipping: {clean_url}")
+                continue
+        except requests.RequestException as e:
+            print(f"  Failed to fetch watch URL: {e}")
+            continue
+
+        title_match = re.search(r"<title[^>]*>([^<]+)</title>", resp.text, re.IGNORECASE)
+        title = title_match.group(1).strip() if title_match else slug.replace("-", " ").title()
+        title = re.sub(r"\s*[|\-]\s*SmartRecruiters.*$", "", title)
+
+        watched.append({
+            "id": job_uuid,
+            "title": title,
+            "url": clean_url,
+            "class_code": class_code,
+            "class_label": "",
+            "employment_type": "",
+            "department": "",
+            "ref_num": "",
+            "released_date": "",
+        })
+        print(f"  Watched job active: {title}")
+    return watched
+
+
+# ---------------------------------------------------------------------------
 # Filtering
 # ---------------------------------------------------------------------------
 
@@ -255,6 +301,17 @@ def main():
         f"  Matched (type='{config.get('employment_type')}', "
         f"classes={config.get('job_classes')}): {len(matched_jobs)}"
     )
+
+    watch_urls = config.get("watch_urls", [])
+    if watch_urls:
+        print(f"\nChecking {len(watch_urls)} watched URL(s) ...")
+        watched = fetch_watched_jobs(watch_urls)
+        # Avoid duplicates if a watched job also appears in the API
+        seen_ids = {j["id"] for j in matched_jobs}
+        for w in watched:
+            if w["id"] not in seen_ids:
+                matched_jobs.append(w)
+                seen_ids.add(w["id"])
 
     new_jobs = find_new_jobs(matched_jobs, seen_jobs)
     print(f"  New since last run: {len(new_jobs)}")
