@@ -56,22 +56,20 @@
 
 ---
 
-## Technical Stack
+## Technical Stack (Revised)
 
 | Layer | Technology | Why |
 |---|---|---|
-| Frontend (Operator) | React + Vite | Fast to build, component-based |
-| Frontend (Visitor PWA) | Vanilla JS or React + MapLibre GL JS | Lightweight, no app install |
+| Frontend (Prototype) | Vanilla HTML/JS + MapLibre GL JS | No build step, fast iteration |
 | Map library | MapLibre GL JS | Open source fork of Mapbox GL, free |
-| Base map tiles | OpenStreetMap via MapTiler free tier | Free up to 100k requests/month |
-| Backend | Node.js + Express (or Python + FastAPI) | Simple REST API |
-| PDF rasterization | Ghostscript (`gs`) or `pdftoppm` | Server-side, open source |
-| Georeferencing math | GDAL (`gdal_translate` + `gdalwarp`) | Industry standard, open source |
-| Database | PostgreSQL + PostGIS | Spatial queries, open source |
-| File storage | Cloudflare R2 | S3-compatible, free egress |
-| Auth | Clerk or Supabase Auth | Simple managed auth, free tier |
-| Hosting | Railway or Render | Free/cheap tiers, Docker support |
-| Background jobs | BullMQ (Redis-backed) | PDF processing is async |
+| Satellite tiles | ESRI World Imagery (free, no key) | No API key required, good quality |
+| Backend | Python + FastAPI | Better image processing ecosystem than Node |
+| PDF rasterization | PyMuPDF (`fitz`) | Pure Python, no system deps (Ghostscript needs Xcode on macOS) |
+| Georeferencing math | scipy RBFInterpolator (TPS) | Pure Python, no system deps (GDAL needs Xcode on macOS) |
+| Database | SQLite | Zero infrastructure; migrate to PostgreSQL when needed |
+| File storage | Local filesystem | Swap to R2/S3 at deploy time |
+| Auth | TBD (Clerk or Supabase Auth) | Phase 2 |
+| Hosting | TBD (Railway or Render) | Phase 2+ |
 
 ---
 
@@ -149,44 +147,42 @@ Full GCP-based georeferencing (QGIS-style) is too complex for non-technical user
 
 ---
 
-## PDF Processing Pipeline
+## PDF Processing Pipeline (As Built)
 
 ```
 User uploads PDF
        │
        ▼
-[Queue: BullMQ job]
+POST /upload
        │
        ▼
-Rasterize PDF → PNG @ 150 DPI
-  (Ghostscript: gs -dNOPAUSE -sDEVICE=png16m -r150 input.pdf output.png)
+Rasterize first page → PNG @ 150 DPI
+  (PyMuPDF: fitz.open → page.get_pixmap → save PNG)
        │
        ▼
-Upload original PNG to R2/S3
-Store image_url in DB
+Store original PDF + rasterized PNG in data/{map_id}/
+Store image metadata in SQLite (width, height, status='uploaded')
        │
        ▼
-[Wait for operator to set control points via UI]
+[Operator uses georeferencing UI to set 9 control points]
        │
        ▼
-[Queue: Warp job triggered on "Confirm" click]
+POST /warp/{map_id}  (with 9 GCPs + bearing)
        │
        ▼
-gdal_translate: assign GCPs to PNG
-  (gdal_translate -gcp px py lon lat ... input.png gcps.tif)
+Thin Plate Spline warp via scipy RBFInterpolator
+  • Map pixel coords → geo coords for all 9 control points
+  • Compute bounding box from geo coords
+  • Build inverse mapping: for each output pixel, find source pixel
+  • Sample source image at mapped coordinates
        │
        ▼
-gdalwarp: warp to EPSG:4326
-  (gdalwarp -tps -r bilinear -t_srs EPSG:4326 gcps.tif warped.tif)
-       │
-       ▼
-Convert warped GeoTIFF → PNG with transparency (for MapLibre overlay)
-  (gdal_translate -of PNG warped.tif warped.png)
-       │
-       ▼
-Extract bounding box from GeoTIFF metadata (gdal.Open → GetGeoTransform)
-Store warped_image_url + bounds in DB
+Save warped PNG with alpha transparency (out-of-bounds → transparent)
+Store warped_image_url + bounds + control_points in SQLite
 Update map status → 'ready'
+       │
+       ▼
+GET /map/{map_id} returns everything the visitor PWA needs
 ```
 
 ---
@@ -243,22 +239,44 @@ map.on('load', () => {
 
 ## Build Plan
 
-### Phase 0 — Validate the core UX (Week 1)
-**Goal:** Prove the 4-corner georeferencing is simple enough for a non-technical person.
+### Phase 0 — Validate the core UX (Week 1) ✅ COMPLETE
+**Goal:** Prove the georeferencing UX is simple enough for a non-technical person.
 
-- [ ] Build a static HTML prototype of the corner-drag UI (no backend)
-- [ ] Use a real zoo PDF and a Leaflet map
+- [x] Built static HTML prototype with MapLibre GL JS (not Leaflet — used MapLibre for the whole project)
+- [x] Used Oakland Zoo map (PDF + PNG from oaklandzoo.org) as test asset
+- [x] Two-step UX flow evolved through testing:
+  - **Step 1 — Orientation:** PDF displayed as fixed CSS overlay (always vertical). User rotates the satellite basemap via bearing slider until the venue's orientation matches the PDF. This solved the problem of diagonally-oriented venues (e.g. Oakland Zoo runs SW→NE).
+  - **Step 2 — Corner alignment:** PDF is projected onto the map as a MapLibre ImageSource. 9-point warp system: 4 corner handles (blue circles), 4 edge midpoint handles (orange diamonds), and 1 draggable center handle (green circle). Image is split into 4 quadrant ImageSources so each quadrant warps independently for more accurate alignment.
+- [x] Opacity slider available in both steps to toggle PDF visibility
 - [ ] Test with 3–5 non-technical people
 - [ ] Success criteria: they can align the map without help in under 2 minutes
 
-### Phase 1 — Working MVP backend (Weeks 2–3)
+**Key UX decisions from prototyping:**
+- Original 4-corner approach worked but couldn't handle venues with non-uniform distortion → added midpoint + center handles (9-point warp)
+- Fixed PDF overlay + rotating satellite is much more intuitive than trying to rotate/drag the PDF itself
+- Center handle moves all 4 inner quadrant corners together — users found this natural
+
+**Files:** `prototype/index.html`, `prototype/app.js`, `prototype/style.css`, `prototype/assets/oakland_zoo_map.png`
+
+### Phase 1 — Working MVP backend (Weeks 2–3) ✅ COMPLETE
 **Goal:** The full pipeline works end-to-end, even if the UI is rough.
 
-- [ ] Set up Node.js/Express API + PostgreSQL + R2 storage
-- [ ] PDF upload endpoint → Ghostscript rasterization → store PNG
-- [ ] GDAL warp endpoint (takes 4 GCPs, returns warped image + bounds)
-- [ ] Venue + pin CRUD endpoints
-- [ ] Background job queue (BullMQ) for processing
+**Stack decisions (simplified from original plan):**
+- Python + FastAPI (not Node) — better ecosystem for image processing
+- SQLite (not PostgreSQL) — zero infrastructure, easy to migrate later
+- Local filesystem (not R2) — swap to cloud storage at deploy time
+- Inline processing (not BullMQ) — FastAPI handles warp inline, no job queue needed
+- PyMuPDF (not Ghostscript) — pure Python PDF rasterization, no system dependency
+- scipy RBFInterpolator (not GDAL) — pure Python TPS warp, no system dependency (GDAL requires full Xcode on macOS)
+
+**Endpoints:**
+- [x] `POST /upload` — PDF upload → PyMuPDF rasterization @ 150 DPI → PNG stored locally
+- [x] `POST /warp/{id}` — accepts 9 control points + bearing → TPS warp via scipy → warped PNG + bounding box
+- [x] `GET /map/{id}` — returns map metadata (status, bounds, control points, image URLs)
+- [x] Static file serving via `/data/` mount for rasterized and warped images
+- [ ] Venue + pin CRUD endpoints (deferred to Phase 2)
+
+**File:** `backend/app.py` (~200 lines, single file), `backend/requirements.txt`
 
 ### Phase 2 — Operator UI (Week 3–4)
 **Goal:** A real person can go from PDF to published map.
@@ -330,6 +348,6 @@ map.on('load', () => {
 
 ## Open Questions to Resolve
 
-1. **Backend language:** Node.js or Python? Python has better GDAL bindings (`rasterio`, `pyproj`) which may simplify the processing pipeline. Node is faster to build a REST API in.
-2. **MapTiler dependency:** Free tier is fine for MVP but creates a vendor dependency. Alternative: self-host OpenMapTiles (complex) or use OSM tile servers directly (unreliable for production).
+1. ~~**Backend language:** Node.js or Python?~~ **Resolved: Python + FastAPI.** Better image processing ecosystem (PyMuPDF, scipy, Pillow). No GDAL system dependency needed.
+2. ~~**MapTiler dependency:**~~ **Resolved: Using ESRI World Imagery tiles (free, no API key).** Avoids vendor lock-in entirely. Can switch to MapTiler or self-hosted tiles later.
 3. **Monetization model:** Per-venue SaaS (~$29–$99/month) vs. per-event (~$199/event) vs. freemium. Festival pricing by event avoids the "we only use it 3 days a year" objection.
