@@ -357,6 +357,7 @@ confirmBtn.addEventListener('click', async () => {
     opacityGroup.classList.add('hidden');
 
     document.getElementById('result-map-id').textContent = 'Map ID: ' + mapId;
+    document.getElementById('viewer-link').href = `viewer.html?id=${mapId}`;
 
     warpStatus.style.display = 'none';
     confirmBtn.disabled = false;
