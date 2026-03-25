@@ -1,17 +1,10 @@
-// Oakland Zoo center coordinates
+const API = 'http://localhost:8000';
+
+// Oakland Zoo center (default — will pan to venue eventually)
 const VENUE_CENTER = [-122.1447, 37.7486];
 const VENUE_ZOOM = 16;
 
-// Image dimensions (2199x3400 PNG)
-const IMG_W = 2199;
-const IMG_H = 3400;
-const HALF_W = IMG_W / 2;
-const HALF_H = IMG_H / 2;
-
-// 9 control points:
-// TL  TM  TR
-// LM  C   RM   (C = draggable, moves all 4 inner quad corners together)
-// BL  BM  BR
+// 9 control point labels
 const POINT_LABELS = {
   topLeft:     'Top-Left',
   topMid:      'Top',
@@ -24,23 +17,29 @@ const POINT_LABELS = {
   bottomRight: 'Bottom-Right',
 };
 
-// The 4 quadrants, each defined by which 9-point keys form its corners.
-// MapLibre ImageSource order: [top-left, top-right, bottom-right, bottom-left]
-const QUADS = [
-  { id: 'quad-tl', corners: ['topLeft',  'topMid',     'center',      'leftMid'     ], srcX: 0,      srcY: 0,      srcW: HALF_W, srcH: HALF_H },
-  { id: 'quad-tr', corners: ['topMid',   'topRight',   'rightMid',    'center'      ], srcX: HALF_W, srcY: 0,      srcW: HALF_W, srcH: HALF_H },
-  { id: 'quad-br', corners: ['center',   'rightMid',   'bottomRight', 'bottomMid'   ], srcX: HALF_W, srcY: HALF_H, srcW: HALF_W, srcH: HALF_H },
-  { id: 'quad-bl', corners: ['leftMid',  'center',     'bottomMid',   'bottomLeft'  ], srcX: 0,      srcY: HALF_H, srcW: HALF_W, srcH: HALF_H },
-];
+// State
+let mapId = null;       // from upload response
+let imgUrl = '';        // rasterized image URL
+let imgW = 0;
+let imgH = 0;
+let pts = {};           // geo coords for all 9 points
+let markers = {};       // MapLibre markers
+let quadUrls = {};      // blob URLs for sliced quadrant images
 
-// State: geo coords for all 9 points
-let pts = {};
+// Derived from image dimensions
+let halfW = 0, halfH = 0;
+let QUADS = [];
 
-// MapLibre markers for each draggable handle
-let markers = {};
-
-// Blob URLs for the 4 sliced quadrant images
-let quadUrls = {};
+function buildQuads() {
+  halfW = imgW / 2;
+  halfH = imgH / 2;
+  QUADS = [
+    { id: 'quad-tl', corners: ['topLeft',  'topMid',     'center',      'leftMid'     ], srcX: 0,     srcY: 0,     srcW: halfW, srcH: halfH },
+    { id: 'quad-tr', corners: ['topMid',   'topRight',   'rightMid',    'center'      ], srcX: halfW, srcY: 0,     srcW: halfW, srcH: halfH },
+    { id: 'quad-br', corners: ['center',   'rightMid',   'bottomRight', 'bottomMid'   ], srcX: halfW, srcY: halfH, srcW: halfW, srcH: halfH },
+    { id: 'quad-bl', corners: ['leftMid',  'center',     'bottomMid',   'bottomLeft'  ], srcX: 0,     srcY: halfH, srcW: halfW, srcH: halfH },
+  ];
+}
 
 // ─── Map setup ──────────────────────────────────────────────────────────────
 
@@ -68,15 +67,12 @@ function midpoint(a, b) {
   return [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
 }
 
-// Initialise pts from the CSS overlay's screen position
 function initPointsFromOverlay() {
   const rect = pdfOverlay.getBoundingClientRect();
-
   function unproj(x, y) {
     const ll = map.unproject([x, y]);
     return [ll.lng, ll.lat];
   }
-
   const tl = unproj(rect.left,  rect.top);
   const tr = unproj(rect.right, rect.top);
   const br = unproj(rect.right, rect.bottom);
@@ -95,35 +91,30 @@ function initPointsFromOverlay() {
 
 // ─── Image slicing ───────────────────────────────────────────────────────────
 
-// Slice the full image into 4 quadrant blobs and store their URLs.
-// Returns a Promise that resolves when all blobs are ready.
 function sliceImage() {
   return new Promise((resolve, reject) => {
-    // Revoke any previous blob URLs
     Object.values(quadUrls).forEach(url => URL.revokeObjectURL(url));
     quadUrls = {};
 
     const img = new Image();
+    img.crossOrigin = 'anonymous';
     img.onload = () => {
-      const pending = QUADS.length;
       let done = 0;
-
       QUADS.forEach(quad => {
         const canvas = document.createElement('canvas');
         canvas.width  = quad.srcW;
         canvas.height = quad.srcH;
         const ctx = canvas.getContext('2d');
         ctx.drawImage(img, quad.srcX, quad.srcY, quad.srcW, quad.srcH, 0, 0, quad.srcW, quad.srcH);
-
         canvas.toBlob(blob => {
           quadUrls[quad.id] = URL.createObjectURL(blob);
           done++;
-          if (done === pending) resolve();
+          if (done === QUADS.length) resolve();
         }, 'image/png');
       });
     };
     img.onerror = reject;
-    img.src = 'assets/oakland_zoo_map.png';
+    img.src = imgUrl;
   });
 }
 
@@ -214,9 +205,15 @@ function hideMarkers() {
 
 // ─── Step transitions ────────────────────────────────────────────────────────
 
-const pdfOverlay  = document.getElementById('pdf-overlay');
-const loadingMsg  = document.getElementById('loading-msg');
-const step1DoneBtn = document.getElementById('step-1-done');
+const pdfOverlay    = document.getElementById('pdf-overlay');
+const loadingMsg    = document.getElementById('loading-msg');
+const step1DoneBtn  = document.getElementById('step-1-done');
+const opacityGroup  = document.getElementById('opacity-group');
+
+function showStep(stepId) {
+  document.querySelectorAll('.step').forEach(s => s.classList.remove('active-step'));
+  document.getElementById(stepId).classList.add('active-step');
+}
 
 async function enterAlignmentMode() {
   step1DoneBtn.disabled = true;
@@ -239,6 +236,57 @@ function exitAlignmentMode() {
   pdfOverlay.style.display = '';
 }
 
+// ─── Upload ─────────────────────────────────────────────────────────────────
+
+const fileInput      = document.getElementById('file-input');
+const uploadBtn      = document.getElementById('upload-btn');
+const uploadFilename = document.getElementById('upload-filename');
+const uploadStatus   = document.getElementById('upload-status');
+
+fileInput.addEventListener('change', () => {
+  const file = fileInput.files[0];
+  if (file) {
+    uploadFilename.textContent = file.name;
+    uploadBtn.disabled = false;
+  }
+});
+
+uploadBtn.addEventListener('click', async () => {
+  const file = fileInput.files[0];
+  if (!file) return;
+
+  uploadBtn.disabled = true;
+  uploadStatus.textContent = 'Uploading and processing...';
+  uploadStatus.style.display = 'block';
+
+  try {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    const res = await fetch(`${API}/upload`, { method: 'POST', body: formData });
+    if (!res.ok) throw new Error(await res.text());
+
+    const data = await res.json();
+    mapId = data.id;
+    imgW  = data.width;
+    imgH  = data.height;
+    imgUrl = `${API}${data.image_url}`;
+
+    buildQuads();
+
+    // Show the rasterized image as the CSS overlay
+    pdfOverlay.src = imgUrl;
+    pdfOverlay.style.display = '';
+    opacityGroup.classList.remove('hidden');
+
+    uploadStatus.style.display = 'none';
+    showStep('step-1');
+  } catch (err) {
+    uploadStatus.textContent = 'Upload failed: ' + err.message;
+    uploadBtn.disabled = false;
+  }
+});
+
 // ─── UI controls ─────────────────────────────────────────────────────────────
 
 const rotationSlider = document.getElementById('rotation-slider');
@@ -254,14 +302,12 @@ rotationSlider.addEventListener('input', (e) => {
 
 step1DoneBtn.addEventListener('click', async () => {
   await enterAlignmentMode();
-  document.getElementById('step-1').classList.remove('active-step');
-  document.getElementById('step-2').classList.add('active-step');
+  showStep('step-2');
 });
 
 document.getElementById('back-btn').addEventListener('click', () => {
   exitAlignmentMode();
-  document.getElementById('step-2').classList.remove('active-step');
-  document.getElementById('step-1').classList.add('active-step');
+  showStep('step-1');
 });
 
 opacitySlider.addEventListener('input', (e) => {
@@ -271,48 +317,69 @@ opacitySlider.addEventListener('input', (e) => {
   setQuadOpacity(val / 100);
 });
 
-// ─── Confirm / Reset ─────────────────────────────────────────────────────────
+// ─── Confirm → Warp API ─────────────────────────────────────────────────────
 
-document.getElementById('confirm-btn').addEventListener('click', () => {
+const confirmBtn = document.getElementById('confirm-btn');
+const warpStatus = document.getElementById('warp-status');
+
+confirmBtn.addEventListener('click', async () => {
+  confirmBtn.disabled = true;
+  warpStatus.textContent = 'Saving...';
+  warpStatus.style.display = 'block';
+
   const controlPoints = [
-    { point: 'topLeft',     px: 0,      py: 0,      lng: pts.topLeft[0],     lat: pts.topLeft[1] },
-    { point: 'topMid',      px: HALF_W, py: 0,      lng: pts.topMid[0],      lat: pts.topMid[1] },
-    { point: 'topRight',    px: IMG_W,  py: 0,      lng: pts.topRight[0],    lat: pts.topRight[1] },
-    { point: 'leftMid',     px: 0,      py: HALF_H, lng: pts.leftMid[0],     lat: pts.leftMid[1] },
-    { point: 'center',      px: HALF_W, py: HALF_H, lng: pts.center[0],      lat: pts.center[1] },
-    { point: 'rightMid',    px: IMG_W,  py: HALF_H, lng: pts.rightMid[0],    lat: pts.rightMid[1] },
-    { point: 'bottomLeft',  px: 0,      py: IMG_H,  lng: pts.bottomLeft[0],  lat: pts.bottomLeft[1] },
-    { point: 'bottomMid',   px: HALF_W, py: IMG_H,  lng: pts.bottomMid[0],   lat: pts.bottomMid[1] },
-    { point: 'bottomRight', px: IMG_W,  py: IMG_H,  lng: pts.bottomRight[0], lat: pts.bottomRight[1] },
+    { point: 'topLeft',     px: 0,     py: 0,     lng: pts.topLeft[0],     lat: pts.topLeft[1] },
+    { point: 'topMid',      px: halfW, py: 0,     lng: pts.topMid[0],      lat: pts.topMid[1] },
+    { point: 'topRight',    px: imgW,  py: 0,     lng: pts.topRight[0],    lat: pts.topRight[1] },
+    { point: 'leftMid',     px: 0,     py: halfH, lng: pts.leftMid[0],     lat: pts.leftMid[1] },
+    { point: 'center',      px: halfW, py: halfH, lng: pts.center[0],      lat: pts.center[1] },
+    { point: 'rightMid',    px: imgW,  py: halfH, lng: pts.rightMid[0],    lat: pts.rightMid[1] },
+    { point: 'bottomLeft',  px: 0,     py: imgH,  lng: pts.bottomLeft[0],  lat: pts.bottomLeft[1] },
+    { point: 'bottomMid',   px: halfW, py: imgH,  lng: pts.bottomMid[0],   lat: pts.bottomMid[1] },
+    { point: 'bottomRight', px: imgW,  py: imgH,  lng: pts.bottomRight[0], lat: pts.bottomRight[1] },
   ];
 
-  const output = { bearing: map.getBearing(), controlPoints };
+  try {
+    const res = await fetch(`${API}/georeference/${mapId}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        bearing: map.getBearing(),
+        control_points: controlPoints,
+      }),
+    });
 
-  document.getElementById('results').classList.remove('hidden');
-  document.getElementById('results-data').textContent = JSON.stringify(output, null, 2);
+    if (!res.ok) throw new Error(await res.text());
 
-  console.log('Control Points:', controlPoints);
-  console.log('GDAL command:\n' + buildGdalCommand(controlPoints));
+    // Keep bearing and quad layers — hide markers, lock map, bump opacity.
+    hideMarkers();
+    setQuadOpacity(0.9);
+    opacityGroup.classList.add('hidden');
+
+    document.getElementById('result-map-id').textContent = 'Map ID: ' + mapId;
+
+    warpStatus.style.display = 'none';
+    confirmBtn.disabled = false;
+    showStep('step-3');
+  } catch (err) {
+    warpStatus.textContent = 'Failed: ' + err.message;
+    confirmBtn.disabled = false;
+  }
 });
+
+// ─── Reset ──────────────────────────────────────────────────────────────────
 
 document.getElementById('reset-btn').addEventListener('click', () => {
   exitAlignmentMode();
   map.setBearing(0);
   rotationSlider.value = 0;
   rotationValue.textContent = '0\u00B0';
-  document.getElementById('step-2').classList.remove('active-step');
-  document.getElementById('step-1').classList.add('active-step');
-  document.getElementById('results').classList.add('hidden');
+  opacityGroup.classList.add('hidden');
+  pdfOverlay.src = '';
+  pdfOverlay.style.display = 'none';
+  fileInput.value = '';
+  uploadFilename.textContent = '';
+  uploadBtn.disabled = true;
+  mapId = null;
+  showStep('step-0');
 });
-
-// ─── GDAL output ─────────────────────────────────────────────────────────────
-
-function buildGdalCommand(controlPoints) {
-  const gcpArgs = controlPoints
-    .map(cp => `-gcp ${cp.px} ${cp.py} ${cp.lng} ${cp.lat}`)
-    .join(' ');
-  return [
-    `gdal_translate ${gcpArgs} input.png gcps.tif`,
-    `gdalwarp -tps -r bilinear -t_srs EPSG:4326 gcps.tif warped.tif`,
-  ].join('\n');
-}

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VenueMap — Georeferencing Prototype</title>
+  <title>VenueMap — Georeferencing</title>
   <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css">
   <link rel="stylesheet" href="style.css">
 </head>
@@ -11,23 +11,43 @@
   <div id="map"></div>
 
   <!-- PDF overlay — stays fixed/vertical, doesn't rotate with map -->
-  <img id="pdf-overlay" src="assets/oakland_zoo_map.png" alt="Venue map">
+  <img id="pdf-overlay" src="" alt="Venue map">
 
   <!-- Control panel -->
   <div id="controls">
-    <h2>VenueMap — Align Your Map</h2>
+    <h2>VenueMap</h2>
 
-    <!-- Opacity slider — always visible -->
-    <div class="control-group">
-      <label for="opacity-slider">PDF Overlay Opacity</label>
+    <!-- Step 0: Upload -->
+    <div id="step-0" class="step active-step">
+      <div class="step-header">
+        <span class="step-number">1</span>
+        <span class="step-title">Upload your venue map</span>
+      </div>
+      <p class="instructions">
+        Upload a PDF of your venue map. We'll convert it to an image
+        you can align with the satellite view.
+      </p>
+      <label for="file-input" class="upload-area" id="upload-label">
+        <span class="upload-icon">+</span>
+        <span class="upload-text">Choose PDF file</span>
+        <span class="upload-filename" id="upload-filename"></span>
+      </label>
+      <input type="file" id="file-input" accept=".pdf" class="hidden">
+      <button id="upload-btn" class="btn-primary" disabled>Upload & Continue</button>
+      <div id="upload-status" class="status-msg"></div>
+    </div>
+
+    <!-- Opacity slider — visible during steps 1 and 2 -->
+    <div id="opacity-group" class="control-group hidden">
+      <label for="opacity-slider">Map Overlay Opacity</label>
       <input type="range" id="opacity-slider" min="0" max="100" value="40">
       <span id="opacity-value">40%</span>
     </div>
 
     <!-- Step 1: Rotate -->
-    <div id="step-1" class="step active-step">
+    <div id="step-1" class="step">
       <div class="step-header">
-        <span class="step-number">1</span>
+        <span class="step-number">2</span>
         <span class="step-title">Orient the satellite view</span>
       </div>
       <p class="instructions">
@@ -37,32 +57,38 @@
       <div class="control-group">
         <label for="rotation-slider">Rotation</label>
         <input type="range" id="rotation-slider" min="-180" max="180" value="0" step="1">
-        <span id="rotation-value">0°</span>
+        <span id="rotation-value">0&deg;</span>
       </div>
       <button id="step-1-done" class="btn-primary">Orientation Set</button>
-      <div id="loading-msg">Preparing map tiles...</div>
+      <div id="loading-msg" class="status-msg">Preparing map tiles...</div>
     </div>
 
     <!-- Step 2: Drag corners -->
     <div id="step-2" class="step">
       <div class="step-header">
-        <span class="step-number">2</span>
+        <span class="step-number">3</span>
         <span class="step-title">Align the corners</span>
       </div>
       <p class="instructions">
-        Drag the <strong>4 corner handles</strong> on the map to match the
-        corners of your PDF overlay — Top-Left, Top-Right, Bottom-Right,
-        Bottom-Left.
+        Drag the handles to align your map with the satellite imagery.
+        Use the opacity slider to check your work.
       </p>
       <button id="confirm-btn" class="btn-primary">Looks Good!</button>
-      <button id="reset-btn" class="btn-secondary">Reset Position</button>
+      <div id="warp-status" class="status-msg"></div>
       <button id="back-btn" class="btn-secondary">Back to Rotation</button>
     </div>
 
-    <!-- Results panel (hidden until confirm) -->
-    <div id="results" class="hidden">
-      <h3>Control Points</h3>
-      <pre id="results-data"></pre>
+    <!-- Step 3: Result -->
+    <div id="step-3" class="step">
+      <div class="step-header">
+        <span class="step-number done">&#10003;</span>
+        <span class="step-title">Map is ready!</span>
+      </div>
+      <p class="instructions">
+        Your map has been georeferenced. Below is the shareable map ID.
+      </p>
+      <div class="result-id" id="result-map-id"></div>
+      <button id="reset-btn" class="btn-secondary">Start Over</button>
     </div>
   </div>
 

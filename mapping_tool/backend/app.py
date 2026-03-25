@@ -4,14 +4,10 @@ import uuid
 from pathlib import Path
 
 import fitz  # PyMuPDF
-import numpy as np
 from fastapi import FastAPI, File, UploadFile, HTTPException
-from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from PIL import Image
-from scipy.interpolate import RBFInterpolator
 
 # ─── Config ──────────────────────────────────────────────────────────────────
 
@@ -38,10 +34,9 @@ def init_db():
             image_path TEXT,
             image_width INTEGER,
             image_height INTEGER,
-            warped_image_path TEXT,
             control_points TEXT,
             bearing REAL,
-            bounds TEXT,
+            corners TEXT,
             status TEXT DEFAULT 'uploaded',
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         );
@@ -59,7 +54,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Serve warped/rasterized images
 app.mount("/data", StaticFiles(directory=str(DATA_DIR)), name="data")
 
 
@@ -77,7 +71,7 @@ class ControlPoint(BaseModel):
     lng: float
     lat: float
 
-class WarpRequest(BaseModel):
+class GeoreferenceRequest(BaseModel):
     bearing: float
     control_points: list[ControlPoint]
 
@@ -127,120 +121,47 @@ async def upload_pdf(file: UploadFile = File(...)):
     }
 
 
-# ─── Warp ────────────────────────────────────────────────────────────────────
+# ─── Georeference (save control points + compute display corners) ────────────
 
-def tps_warp(src_img: np.ndarray, src_points: np.ndarray, dst_points: np.ndarray,
-             output_size: tuple[int, int]) -> np.ndarray:
-    """
-    Thin Plate Spline warp using scipy RBF interpolation.
-
-    src_points: Nx2 array of pixel coordinates on the source image
-    dst_points: Nx2 array of corresponding pixel coordinates on the output image
-    output_size: (width, height) of the output
-    """
-    out_w, out_h = output_size
-
-    # Build grid of all output pixel coordinates
-    grid_x, grid_y = np.meshgrid(np.arange(out_w), np.arange(out_h))
-    grid_pts = np.column_stack([grid_x.ravel(), grid_y.ravel()])
-
-    # Interpolate: for each output pixel, find where it maps in the source
-    interp_x = RBFInterpolator(dst_points, src_points[:, 0], kernel="thin_plate_spline")
-    interp_y = RBFInterpolator(dst_points, src_points[:, 1], kernel="thin_plate_spline")
-
-    map_x = interp_x(grid_pts).reshape(out_h, out_w).astype(np.float32)
-    map_y = interp_y(grid_pts).reshape(out_h, out_w).astype(np.float32)
-
-    # Sample source image at mapped coordinates (with bounds checking)
-    map_x = np.clip(map_x, 0, src_img.shape[1] - 1).astype(int)
-    map_y = np.clip(map_y, 0, src_img.shape[0] - 1).astype(int)
-
-    # Create output with alpha channel
-    if src_img.ndim == 3:
-        output = src_img[map_y, map_x]
-    else:
-        output = src_img[map_y, map_x]
-
-    # Set out-of-bounds pixels to transparent
-    mask = (map_x >= 0) & (map_x < src_img.shape[1]) & (map_y >= 0) & (map_y < src_img.shape[0])
-
-    return output, mask
-
-
-@app.post("/warp/{map_id}")
-async def warp_map(map_id: str, req: WarpRequest):
+@app.post("/georeference/{map_id}")
+async def georeference_map(map_id: str, req: GeoreferenceRequest):
     conn = get_db()
     row = conn.execute("SELECT * FROM maps WHERE id = ?", (map_id,)).fetchone()
     if not row:
         conn.close()
         raise HTTPException(404, "Map not found")
 
-    conn.execute("UPDATE maps SET status = 'processing' WHERE id = ?", (map_id,))
+    # The 4 outer corner control points define how MapLibre should display the image.
+    # MapLibre ImageSource expects: [top-left, top-right, bottom-right, bottom-left]
+    # Each as [lng, lat].
+    corner_keys = {'topLeft', 'topRight', 'bottomRight', 'bottomLeft'}
+    corner_pts = {cp.point: [cp.lng, cp.lat] for cp in req.control_points if cp.point in corner_keys}
+
+    if len(corner_pts) < 4:
+        conn.close()
+        raise HTTPException(400, "Must include topLeft, topRight, bottomRight, bottomLeft control points")
+
+    corners = [
+        corner_pts['topLeft'],
+        corner_pts['topRight'],
+        corner_pts['bottomRight'],
+        corner_pts['bottomLeft'],
+    ]
+
+    conn.execute(
+        "UPDATE maps SET control_points = ?, bearing = ?, corners = ?, status = 'ready' WHERE id = ?",
+        (json.dumps([cp.model_dump() for cp in req.control_points]),
+         req.bearing, json.dumps(corners), map_id),
+    )
     conn.commit()
+    conn.close()
 
-    try:
-        # Load the rasterized image
-        img = Image.open(row["image_path"]).convert("RGBA")
-        img_array = np.array(img)
-        img_w, img_h = img.size
-
-        # Extract control points
-        src_pixels = np.array([[cp.px, cp.py] for cp in req.control_points])
-        geo_coords = np.array([[cp.lng, cp.lat] for cp in req.control_points])
-
-        # Compute bounding box in geo coordinates
-        min_lng, min_lat = geo_coords.min(axis=0)
-        max_lng, max_lat = geo_coords.max(axis=0)
-
-        bounds = {
-            "north": float(max_lat),
-            "south": float(min_lat),
-            "east": float(max_lng),
-            "west": float(min_lng),
-        }
-
-        # Map geo coords to output pixel coords within the bounding box.
-        # Output image will be same resolution as input.
-        out_w = img_w
-        out_h = img_h
-
-        # Scale geo coords to output pixel space
-        dst_pixels = np.zeros_like(src_pixels)
-        dst_pixels[:, 0] = (geo_coords[:, 0] - min_lng) / (max_lng - min_lng) * (out_w - 1)
-        dst_pixels[:, 1] = (max_lat - geo_coords[:, 1]) / (max_lat - min_lat) * (out_h - 1)  # flip Y
-
-        # Run TPS warp
-        warped_rgb, mask = tps_warp(img_array[:, :, :3], src_pixels, dst_pixels, (out_w, out_h))
-
-        # Build RGBA output with transparency outside the map area
-        alpha = np.where(mask, 255, 0).astype(np.uint8)
-        warped_rgba = np.dstack([warped_rgb, alpha])
-
-        # Save
-        warped_path = DATA_DIR / map_id / "warped.png"
-        Image.fromarray(warped_rgba).save(str(warped_path))
-
-        # Update DB
-        conn.execute(
-            "UPDATE maps SET warped_image_path = ?, control_points = ?, bearing = ?, bounds = ?, status = 'ready' WHERE id = ?",
-            (str(warped_path), json.dumps([cp.model_dump() for cp in req.control_points]),
-             req.bearing, json.dumps(bounds), map_id),
-        )
-        conn.commit()
-        conn.close()
-
-        return {
-            "id": map_id,
-            "warped_image_url": f"/data/{map_id}/warped.png",
-            "bounds": bounds,
-            "status": "ready",
-        }
-
-    except Exception as e:
-        conn.execute("UPDATE maps SET status = 'error' WHERE id = ?", (map_id,))
-        conn.commit()
-        conn.close()
-        raise HTTPException(500, f"Warp failed: {str(e)}")
+    return {
+        "id": map_id,
+        "image_url": f"/data/{map_id}/rasterized.png",
+        "corners": corners,
+        "status": "ready",
+    }
 
 
 # ─── Map metadata (for visitor PWA) ─────────────────────────────────────────
@@ -263,8 +184,7 @@ async def get_map(map_id: str):
     }
 
     if row["status"] == "ready":
-        result["warped_image_url"] = f"/data/{map_id}/warped.png"
-        result["bounds"] = json.loads(row["bounds"])
+        result["corners"] = json.loads(row["corners"])
         result["bearing"] = row["bearing"]
         result["control_points"] = json.loads(row["control_points"])
 
