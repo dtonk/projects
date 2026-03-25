@@ -1,4 +1,4 @@
-const API = 'http://localhost:8000';
+const API = `http://${window.location.hostname}:8000`;
 
 // Get map ID from URL: viewer.html?id=xxx
 const params = new URLSearchParams(window.location.search);

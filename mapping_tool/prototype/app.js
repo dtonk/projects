@@ -1,4 +1,4 @@
-const API = 'http://localhost:8000';
+const API = `http://${window.location.hostname}:8000`;
 
 // Oakland Zoo center (default — will pan to venue eventually)
 const VENUE_CENTER = [-122.1447, 37.7486];
