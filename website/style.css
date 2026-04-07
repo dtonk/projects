@@ -89,7 +89,7 @@ a:hover { text-decoration: underline; }
   text-align: center;
   padding: 80px 28px;
 }
-.hero__logo   { width: 100%; max-width: 400px; margin: 0 auto 40px; }
+.hero__logo   { width: 100%; max-width: 500px; margin: 0 auto 40px; }
 .hero__tagline {
   font-size: 11px; letter-spacing: 0.14em;
   color: var(--text-gray); text-transform: uppercase;
