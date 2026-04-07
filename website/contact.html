@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact — Lower Technology</title>
+  <meta name="description" content="Get in touch with Lower Technology about data consulting or Low Tech Maps early access.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="grid-bg">
+
+  <!-- Nav -->
+  <nav class="nav">
+    <div class="nav__inner">
+      <a href="index.html" class="nav__logo">Lower <span class="accent">Technology</span></a>
+      <ul class="nav__links">
+        <li><a href="services.html">Services</a></li>
+        <li><a href="products.html">Products</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html" class="active">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Page Hero -->
+  <div class="page-hero">
+    <div class="container">
+      <span class="label">Contact</span>
+      <h1>Get in touch</h1>
+      <p>
+        For consulting inquiries, Low Tech Maps early access, or anything else —
+        fill out the form or send a direct email.
+      </p>
+    </div>
+  </div>
+
+  <!-- Contact Form + Info -->
+  <section class="section">
+    <div class="container">
+      <div class="contact-grid">
+
+        <!-- Form -->
+        <div>
+          <!-- Netlify Forms: add `netlify` attribute when deployed to Netlify -->
+          <form class="contact-form" name="contact" method="POST" netlify>
+            <input type="hidden" name="form-name" value="contact">
+
+            <div class="form-group">
+              <label for="name">Name</label>
+              <input type="text" id="name" name="name" placeholder="Your name" required>
+            </div>
+
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" placeholder="you@example.com" required>
+            </div>
+
+            <div class="form-group">
+              <label for="org">Organization</label>
+              <input type="text" id="org" name="organization" placeholder="Your org (optional)">
+            </div>
+
+            <div class="form-group">
+              <label for="topic">Topic</label>
+              <select id="topic" name="topic">
+                <option value="" disabled selected>Select one</option>
+                <option value="consulting">Data consulting inquiry</option>
+                <option value="venuemap">Low Tech Maps early access</option>
+                <option value="other">Something else</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="message">Message</label>
+              <textarea id="message" name="message" placeholder="Tell us what you're working on..." required></textarea>
+            </div>
+
+            <button type="submit" class="btn btn--primary" style="align-self:flex-start;">Send Message</button>
+          </form>
+        </div>
+
+        <!-- Contact Info -->
+        <div class="contact-info">
+          <p>
+            We respond within one business day. For consulting work, it helps to know
+            your organization type, rough timeline, and the problem you're trying to solve.
+            Don't over-prepare — a paragraph is enough.
+          </p>
+
+          <a href="mailto:hello@lower.technology" class="contact-link">
+            <span class="contact-link__type">Email</span>
+            <span class="contact-link__val">hello@lower.technology</span>
+          </a>
+
+          <div style="margin-top:40px; padding-top:40px; border-top:1px solid var(--border);">
+            <span class="label">Based in</span>
+            <p style="font-size:13px; color:var(--text-gray);">San Francisco, CA</p>
+          </div>
+
+          <div style="margin-top:32px;">
+            <span class="label">Low Tech Maps</span>
+            <p style="font-size:13px; color:var(--text-gray); margin-bottom:12px;">
+              If you're reaching out about early access to Low Tech Maps, let us know:
+              your venue type, approximate size, and how visitors currently navigate.
+            </p>
+            <a href="products.html" style="font-size:12px; color:var(--teal); letter-spacing:0.1em; text-transform:uppercase;">
+              Learn about Low Tech Maps &rarr;
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer__inner">
+      <span class="footer__brand">Lower Technology LLC</span>
+      <ul class="footer__links">
+        <li><a href="services.html">Services</a></li>
+        <li><a href="products.html">Products</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+      <span class="footer__copy">&copy; 2026 Lower Technology LLC</span>
+    </div>
+  </footer>
+
+</body>
+</html>
