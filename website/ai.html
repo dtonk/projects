@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About AI — Lower Technology</title>
+  <meta name="description" content="AI is only as good as the data you give it. Lower Technology helps you build the foundation AI needs to work.">
+  <meta property="og:title" content="Lower Technology">
+  <meta property="og:description" content="AI is only as good as the data you give it. Lower Technology helps you build the foundation AI needs to work.">
+  <meta property="og:image" content="https://lower.technology/logo.png">
+  <meta property="og:type" content="website">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="grid-bg">
+
+  <!-- Nav -->
+  <nav class="nav">
+    <div class="nav__inner">
+      <a href="index.html" class="nav__logo">Lower <span class="accent">Technology</span></a>
+      <ul class="nav__links">
+        <li><a href="services.html">Services</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="ai.html" class="active">About AI</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+      <button class="nav__hamburger" id="hamburger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+  <div class="nav__mobile" id="mobile-menu">
+    <ul>
+      <li><a href="services.html">Services</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="ai.html" class="active">About AI</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </div>
+
+  <!-- Page Hero -->
+  <div class="page-hero">
+    <div class="container">
+      <span class="label">About AI</span>
+      <h1>AI starts with your data</h1>
+      <p>
+        AI is an incredibly powerful tool. But it is only as powerful as the information you give it.
+      </p>
+    </div>
+  </div>
+
+  <!-- Section 1: AI Ready -->
+  <section class="section">
+    <div class="container">
+      <div class="section__header">
+        <span class="label">The Foundation</span>
+        <h2>Are you AI ready?</h2>
+        <p>
+          They say "garbage in, garbage out." That has never been more true than with AI.
+        </p>
+      </div>
+      <div class="philosophy">
+        <div class="philosophy__text">
+          <p>
+            AI needs context to be useful. It needs to know what each database, table,
+            and column is and how they relate to one another. Even individual values
+            need explanation. No AI is going to correctly interpret "Type&nbsp;=&nbsp;2"
+            without someone documenting what that means.
+          </p>
+          <p>
+            This is metadata: data about your data. It is the foundation that AI
+            reads to understand your systems. Without it, you get confident answers
+            built on bad assumptions. With it, you get something that actually works.
+          </p>
+          <p>
+            Getting AI ready is not about buying a new platform. It is about
+            documenting what you have, cleaning up what is broken, and making sure
+            your data tells the whole story.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider--solid divider">
+
+  <!-- Section 2: Can AI do your job? -->
+  <section class="section">
+    <div class="container">
+      <div class="section__header">
+        <span class="label">The Human Element</span>
+        <h2>Can AI do your job?</h2>
+        <p>
+          Definitely some of it. But probably not the part you are worried about.
+        </p>
+      </div>
+      <div class="philosophy">
+        <div class="philosophy__text">
+          <p>
+            If everything in your system is mapped source to target, fully documented,
+            and well understood, then congratulations — AI can probably take it from
+            here, and you probably do not need us.
+          </p>
+          <p>
+            But that is rarely the case. Most organizations run on institutional
+            knowledge: the things your senior analyst knows that have never been
+            written down. The context behind why a report excludes certain records.
+            The business logic that lives in someone's head and not in the codebase.
+          </p>
+          <p>
+            We help bridge that gap. We connect the human side — the knowledge your
+            team carries — to the technical side, so that both you and the AI have
+            the whole picture. The goal is not to replace your team. It is to make
+            sure the tools they use actually understand what they are working with.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- CTA -->
+  <section class="section" style="text-align:center; padding-bottom:100px;">
+    <div class="container" style="max-width:480px;">
+      <span class="label">Get Started</span>
+      <h2 style="margin-bottom:16px;">Want to get AI ready?</h2>
+      <p style="font-size:13px; color:var(--text-gray); line-height:1.9; margin-bottom:36px;">
+        We can help you assess where you are, document what you have,
+        and build the foundation AI needs to actually be useful.
+      </p>
+      <a href="contact.html" class="btn btn--primary">Get in Touch</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer__inner">
+      <span class="footer__brand">Lower Technology LLC</span>
+      <ul class="footer__links">
+        <li><a href="services.html">Services</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="ai.html">About AI</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+      <span class="footer__copy">&copy; 2026 Lower Technology LLC</span>
+    </div>
+  </footer>
+
+<script>
+  const btn = document.getElementById('hamburger');
+  const menu = document.getElementById('mobile-menu');
+  btn.addEventListener('click', () => {
+    btn.classList.toggle('open');
+    menu.classList.toggle('open');
+  });
+</script>
+</body>
+</html>
