@@ -54,7 +54,7 @@
         <!-- Form -->
         <div>
           <!-- Netlify Forms: add `netlify` attribute when deployed to Netlify -->
-          <form class="contact-form" name="contact" method="POST" action="/thank-you.html" netlify>
+          <form class="contact-form" name="contact" method="POST" action="/thank-you.html" netlify data-netlify-recaptcha="true">
             <input type="hidden" name="form-name" value="contact">
 
             <div class="form-group">
@@ -86,6 +86,7 @@
               <textarea id="message" name="message" placeholder="Tell us what you're working on..." required></textarea>
             </div>
 
+            <div data-netlify-recaptcha="true" style="margin-bottom:16px;"></div>
             <button type="submit" class="btn btn--primary" style="align-self:flex-start;">Send Message</button>
           </form>
         </div>
