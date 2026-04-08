@@ -4,9 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Lower Technology — Foundational Data Solutions</title>
-  <meta name="description" content="Lower Technology builds practical data foundations for startups, nonprofits, and government agencies. No unnecessary complexity.">
+  <meta name="description" content="Lower Technology designs foundational data solutions.">
   <meta property="og:title" content="Lower Technology — Foundational Data Solutions">
-  <meta property="og:description" content="Lower Technology builds practical data foundations for startups, nonprofits, and government agencies. No unnecessary complexity.">
+  <meta property="og:description" content="Lower Technology designs foundational data solutions.">
   <meta property="og:image" content="https://lower.technology/og-image.png">
   <meta property="og:type" content="website">
   <link rel="stylesheet" href="style.css">
@@ -22,8 +22,18 @@
         <li><a href="about.html">About</a></li>
         <li><a href="contact.html">Contact</a></li>
       </ul>
+      <button class="nav__hamburger" id="hamburger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
     </div>
   </nav>
+  <div class="nav__mobile" id="mobile-menu">
+    <ul>
+      <li><a href="services.html">Services</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </div>
 
   <!-- Hero -->
   <section class="hero">
@@ -97,5 +107,13 @@
     </div>
   </footer>
 
+<script>
+  const btn = document.getElementById('hamburger');
+  const menu = document.getElementById('mobile-menu');
+  btn.addEventListener('click', () => {
+    btn.classList.toggle('open');
+    menu.classList.toggle('open');
+  });
+</script>
 </body>
 </html>
