@@ -342,9 +342,7 @@ hr.divider--solid { background: var(--border); }
 
 /* ===== Founder ===== */
 .founder {
-  display: grid;
-  grid-template-columns: 240px 1fr;
-  gap: 48px; align-items: start;
+  display: block;
   padding: 40px 0;
   border-top: 1px solid var(--border);
   margin-top: 64px;
