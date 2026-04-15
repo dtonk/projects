@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Community Rates — Lower Technology</title>
+  <meta name="description" content="Lower Technology offers discounted rates for nonprofits, employee-owned businesses, and open data initiatives.">
+  <meta property="og:title" content="Community Rates — Lower Technology">
+  <meta property="og:description" content="Discounted consulting rates for nonprofits, employee-owned businesses, and open data initiatives.">
+  <meta property="og:image" content="https://lower.technology/logo.png">
+  <meta property="og:type" content="website">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="grid-bg">
+
+  <!-- Nav -->
+  <nav class="nav">
+    <div class="nav__inner">
+      <a href="index.html" class="nav__logo">Lower <span class="accent">Technology</span></a>
+      <ul class="nav__links">
+        <li><a href="services.html">Services</a></li>
+        <li><a href="community.html" class="active">Community</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+      <button class="nav__hamburger" id="hamburger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+  <div class="nav__mobile" id="mobile-menu">
+    <ul>
+      <li><a href="services.html">Services</a></li>
+      <li><a href="community.html" class="active">Community</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </div>
+
+  <!-- Page Hero -->
+  <div class="page-hero">
+    <div class="container">
+      <span class="label">Community</span>
+      <h1>Discounted rates for work that matters</h1>
+      <p>
+        We believe good data infrastructure shouldn't only be accessible to companies with big budgets.
+        If your organization fits one of the categories below, we offer significantly reduced rates.
+      </p>
+    </div>
+  </div>
+
+  <!-- Qualifying Organizations -->
+  <section class="section">
+    <div class="container">
+      <div class="section__header">
+        <span class="label">Who Qualifies</span>
+        <h2>Organizations we want to support</h2>
+        <p>
+          The following types of organizations are eligible for our community rates.
+          If you're not sure whether you qualify, reach out — we're happy to talk.
+        </p>
+      </div>
+      <div class="services-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
+        <div class="service-card">
+          <span class="service-card__num">01</span>
+          <h3>Nonprofits</h3>
+          <p>
+            501(c)(3) organizations and their equivalents. You're doing important work
+            with limited resources — your data systems should still be solid.
+          </p>
+        </div>
+        <div class="service-card">
+          <span class="service-card__num">02</span>
+          <h3>Employee-Owned Businesses</h3>
+          <p>
+            Co-ops, ESOPs, and other employee-owned structures. We believe in the model
+            and want to help it succeed with better data foundations.
+          </p>
+        </div>
+        <div class="service-card">
+          <span class="service-card__num">03</span>
+          <h3>Open Data Initiatives</h3>
+          <p>
+            Projects focused on making public data more accessible, usable, or transparent.
+            If your work makes data available to everyone, we want to support it.
+          </p>
+        </div>
+        <div class="service-card">
+          <span class="service-card__num">04</span>
+          <h3>People Doing Good</h3>
+          <p>
+            You don't need a 501(c)(3) to be doing something worth supporting.
+            If you're working on something that helps people and need a hand with your data,
+            reach out. We're happy to help.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider--solid divider">
+
+  <!-- How It Works -->
+  <section class="section">
+    <div class="container">
+      <div class="philosophy">
+        <div class="philosophy__text">
+          <span class="label">How It Works</span>
+          <h2>Same services, lower cost</h2>
+          <p>
+            Community rate engagements get the same quality of work as any other project.
+            We don't cut corners — we cut the price. The scope, deliverables, and level of
+            attention are identical.
+          </p>
+          <p>
+            The discount applies to all of our consulting services: assessments, architecture,
+            governance, analytics infrastructure, and training. We'll work with you to find a
+            scope and pace that fits your budget.
+          </p>
+          <p>
+            No formal application process. Just mention it when you reach out and we'll
+            take it from there.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- CTA -->
+  <section class="section" style="text-align:center; padding-bottom:100px;">
+    <div class="container" style="max-width:480px;">
+      <span class="label">Get Started</span>
+      <h2 style="margin-bottom:16px;">Let's talk about your project</h2>
+      <p style="font-size:13px; color:var(--text-gray); line-height:1.9; margin-bottom:36px;">
+        Reach out and let us know what you're working on.
+        Mention that you're interested in community rates and we'll go from there.
+      </p>
+      <a href="contact.html" class="btn btn--primary">Get in Touch</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer__inner">
+      <span class="footer__brand">Lower Technology LLC</span>
+      <ul class="footer__links">
+        <li><a href="services.html">Services</a></li>
+        <li><a href="community.html">Community</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+      <span class="footer__copy">&copy; 2026 Lower Technology LLC</span>
+    </div>
+  </footer>
+
+<script>
+  const btn = document.getElementById('hamburger');
+  const menu = document.getElementById('mobile-menu');
+  btn.addEventListener('click', () => {
+    btn.classList.toggle('open');
+    menu.classList.toggle('open');
+  });
+</script>
+</body>
+</html>
