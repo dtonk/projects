@@ -1,0 +1,6 @@
+.env
+.env.*
+!.env.example
+index.json
+__pycache__/
+*.pyc
