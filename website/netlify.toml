@@ -1,2 +1,6 @@
 [build]
   publish = "."
+  # Skip the build unless something under website/ actually changed.
+  # Runs from the repo root so the path filter is correct regardless of
+  # Netlify's base directory. Exit 0 => skip build, non-zero => build.
+  ignore = "cd \"$(git rev-parse --show-toplevel)\" && git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF -- website/"
