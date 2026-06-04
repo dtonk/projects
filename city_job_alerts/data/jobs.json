@@ -1,6 +1,17 @@
 {
-  "updated": "2026-06-04T17:41:36.682354+00:00",
+  "updated": "2026-06-04T22:17:40.675444+00:00",
   "jobs": [
+    {
+      "id": "3743990013452026",
+      "title": "1042 - Oracle APEX and Python Developer",
+      "url": "https://jobs.smartrecruiters.com/CityAndCountyOfSanFrancisco1/3743990013452026",
+      "class_code": "1042",
+      "class_label": "1042-IS Engineer-Journey",
+      "employment_type": "Temporary Exempt",
+      "department": "Fire Department",
+      "ref_num": "RTF0161213-01124052",
+      "released_date": "2026-06-03T17:37:46.673Z"
+    },
     {
       "id": "3743990013401906",
       "title": "Senior Data Engineer (1043) - DataSF - Office of City Administrator",
@@ -11,6 +22,17 @@
       "department": "City Administrator",
       "ref_num": "RTF0162668-01158476",
       "released_date": "2026-06-01T18:15:46.933Z"
+    },
+    {
+      "id": "3743990013337236",
+      "title": "Director of Talent Acquisition (0932 Manager IV) - SFO - People, Performance & Development",
+      "url": "https://jobs.smartrecruiters.com/CityAndCountyOfSanFrancisco1/3743990013337236",
+      "class_code": "0932",
+      "class_label": "0932-Manager IV",
+      "employment_type": "Temporary Exempt",
+      "department": "San Francisco International Airport",
+      "ref_num": "RTF0165579-01156016",
+      "released_date": "2026-05-27T20:37:15.658Z"
     },
     {
       "id": "3743990013327482",
@@ -35,6 +57,17 @@
       "released_date": "2026-05-27T15:27:53.395Z"
     },
     {
+      "id": "3743990013242462",
+      "title": "Solutions Architect (9976) - Department of Technology ",
+      "url": "https://jobs.smartrecruiters.com/CityAndCountyOfSanFrancisco1/3743990013242462",
+      "class_code": "9976",
+      "class_label": "9976-Technology Expert I",
+      "employment_type": "Temporary Exempt",
+      "department": "Technology",
+      "ref_num": "REF60481Q",
+      "released_date": "2026-05-20T22:23:59.168Z"
+    },
+    {
       "id": "3743990013178995",
       "title": "CHIEF INFORMATION OFFICER - INFORMATION TECHNOLOGY SERVICES - SFPUC (0943) ",
       "url": "https://jobs.smartrecruiters.com/CityAndCountyOfSanFrancisco1/3743990013178995",
@@ -57,6 +90,17 @@
       "released_date": "2026-05-08T21:50:01.307Z"
     },
     {
+      "id": "3743990012814326",
+      "title": "Disaster Recovery and Resilience Specialist (1043)- Department of Technology",
+      "url": "https://jobs.smartrecruiters.com/CityAndCountyOfSanFrancisco1/3743990012814326",
+      "class_code": "1043",
+      "class_label": "1043-IS Engineer-Senior",
+      "employment_type": "Temporary Exempt",
+      "department": "Technology",
+      "ref_num": "REF60426L",
+      "released_date": "2026-04-24T17:26:03.972Z"
+    },
+    {
       "id": "3743990012625586",
       "title": "Principal System Integration Engineer (Enterprise Systems), Oracle BPEL / SOA Integration (1064) \u2013 Department of Technology",
       "url": "https://jobs.smartrecruiters.com/CityAndCountyOfSanFrancisco1/3743990012625586",
@@ -66,6 +110,17 @@
       "department": "Technology",
       "ref_num": "REF60087O",
       "released_date": "2026-04-15T21:09:55.696Z"
+    },
+    {
+      "id": "3743990012625546",
+      "title": "Principal System Integration Engineer (Enterprise Systems), Python (1064) \u2013 Department of Technology",
+      "url": "https://jobs.smartrecruiters.com/CityAndCountyOfSanFrancisco1/3743990012625546",
+      "class_code": "1064",
+      "class_label": "1064-IS Programmer Analyst-Principal",
+      "employment_type": "Temporary Exempt",
+      "department": "Technology",
+      "ref_num": "RTF0160953-01145751",
+      "released_date": "2026-04-15T21:09:19.958Z"
     },
     {
       "id": "3743990012072117",
