@@ -179,12 +179,16 @@ def fetch_watched_jobs(watch_urls):
 
 def filter_jobs(jobs, config):
     """Keep only jobs matching the configured fill type and job classes."""
-    target_type = config.get("employment_type", "Permanent Exempt").strip()
+    raw_type = config.get("employment_type", "Permanent Exempt")
+    if isinstance(raw_type, list):
+        target_types = {t.strip() for t in raw_type}
+    else:
+        target_types = {raw_type.strip()}
     target_classes = {str(c).strip() for c in config.get("job_classes", [])}
 
     matched = []
     for job in jobs:
-        if job["employment_type"] != target_type:
+        if job["employment_type"] not in target_types:
             continue
         if target_classes and job["class_code"] not in target_classes:
             continue
@@ -298,7 +302,7 @@ def main():
     print("\nFiltering ...")
     matched_jobs = filter_jobs(all_jobs, config)
     print(
-        f"  Matched (type='{config.get('employment_type')}', "
+        f"  Matched (type={config.get('employment_type')!r}, "
         f"classes={config.get('job_classes')}): {len(matched_jobs)}"
     )
 

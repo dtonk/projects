@@ -1,5 +1,5 @@
 {
-  "employment_type": "Permanent Exempt",
+  "employment_type": ["Permanent Exempt", "Temporary Exempt"],
 
   "job_classes": [
     "1042",
@@ -43,6 +43,6 @@
     "job_classes": "Add/remove SF job class codes (as strings) to filter. Leave the list empty ([]) to match ALL Permanent Exempt jobs.",
     "watch_urls": "Direct URLs for unlisted (/ni/) SmartRecruiters postings that don't appear in the public API.",
     "email": "Set 'to' here for local runs. For GitHub Actions, set SMTP_USER, SMTP_PASS, and ALERT_EMAIL as repository secrets.",
-    "employment_type": "Change to 'Temporary Exempt', 'Permanent Civil Service', etc. to watch a different type."
+    "employment_type": "A single string or list of strings: 'Permanent Exempt', 'Temporary Exempt', 'Permanent Civil Service', etc."
   }
 }
