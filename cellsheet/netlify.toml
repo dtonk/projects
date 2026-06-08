@@ -1,0 +1,22 @@
+# Netlify config for Cellsheet — a SEPARATE Netlify site from the `website`
+# deploy, connected to the same repo. In the Netlify UI, set this site's
+# "Base directory" to `cellsheet` so Netlify reads this file (not the root
+# netlify.toml) and runs the build from here.
+
+[build]
+  command = "npm run build"
+  publish = "dist"
+  # Skip the build unless something under cellsheet/ actually changed.
+  # Runs from the repo root so the path filter is correct regardless of
+  # Netlify's base directory. Exit 0 => skip build, non-zero => build.
+  ignore = "cd \"$(git rev-parse --show-toplevel)\" && git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF -- cellsheet/"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# Single-page app: serve index.html for any unknown path (so refreshes and
+# deep links don't 404).
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
