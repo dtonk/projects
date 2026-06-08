@@ -5,16 +5,22 @@ import { parseFile, parseUrl } from './lib/parseCsv';
 import { addRecent } from './lib/recents';
 import { applyFilters, isFilterActive, type ColumnFilter, type Filters } from './lib/filter';
 import { OpenScreen } from './components/OpenScreen';
+import { Onboarding, type OnboardingConfig } from './components/Onboarding';
 import { SearchBar } from './components/SearchBar';
 import { TableView } from './components/TableView';
 import { RowCard } from './components/RowCard';
 import { ColumnFilterSheet } from './components/ColumnFilterSheet';
 
+type Phase = 'onboarding' | 'viewing';
+
 export default function App() {
   const [dataset, setDataset] = useState<Dataset | null>(null);
+  const [phase, setPhase] = useState<Phase>('onboarding');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const [tableName, setTableName] = useState('');
+  const [visibleColumnNames, setVisibleColumnNames] = useState<string[]>([]);
   const [search, setSearch] = useState('');
   const [filters, setFilters] = useState<Filters>({});
   const [openRow, setOpenRow] = useState<number | null>(null);
@@ -46,12 +52,25 @@ export default function App() {
     }
   }
 
+  /** A freshly loaded dataset starts in the onboarding wizard. */
   function reset(ds: Dataset) {
     setDataset(ds);
+    setPhase('onboarding');
+    setTableName('');
+    setVisibleColumnNames(ds.columns.map((c) => c.name));
     setSearch('');
     setFilters({});
     setOpenRow(null);
     setFilterColumn(null);
+  }
+
+  function completeOnboarding(config: OnboardingConfig) {
+    setTableName(config.name);
+    setVisibleColumnNames(config.visibleColumns);
+    setFilters(config.filters);
+    setOpenRow(null);
+    setFilterColumn(null);
+    setPhase('viewing');
   }
 
   // Auto-open ?url= so shared links open straight into the data.
@@ -73,10 +92,16 @@ export default function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Only the columns the user chose to keep, in original order.
+  const activeColumns = useMemo(() => {
+    if (!dataset) return [];
+    return dataset.columns.filter((c) => visibleColumnNames.includes(c.name));
+  }, [dataset, visibleColumnNames]);
+
   const filteredRows = useMemo(() => {
     if (!dataset) return [];
-    return applyFilters(dataset.rows, dataset.columns, filters, search);
-  }, [dataset, filters, search]);
+    return applyFilters(dataset.rows, activeColumns, filters, search);
+  }, [dataset, activeColumns, filters, search]);
 
   const activeFilterColumns = useMemo(() => {
     const set = new Set<string>();
@@ -92,9 +117,16 @@ export default function App() {
     );
   }
 
-  const sourceLabel = dataset.sourceType === 'file'
-    ? dataset.sourceName
-    : dataset.sourceName.replace(/^https?:\/\//, '');
+  if (phase === 'onboarding') {
+    return (
+      <Onboarding
+        dataset={dataset}
+        onComplete={completeOnboarding}
+        onCancel={() => setDataset(null)}
+      />
+    );
+  }
+
   const activeColumn = filterColumn
     ? dataset.columns.find((c) => c.name === filterColumn) ?? null
     : null;
@@ -104,8 +136,9 @@ export default function App() {
       <header className="safe-top flex flex-col gap-2 px-4 pb-2 pt-3"
         style={{ borderBottom: '1px solid var(--border)' }}>
         <div className="flex items-center justify-between gap-2">
-          <span className="truncate text-sm font-medium" title={dataset.sourceName}>
-            {sourceLabel}
+          <span className="truncate text-base font-semibold" title={dataset.sourceName}
+            style={{ color: 'var(--label)' }}>
+            {tableName || 'Untitled table'}
           </span>
           <button type="button" onClick={() => setDataset(null)}
             className="shrink-0 text-sm" style={{ color: 'var(--accent)' }}>
@@ -121,7 +154,7 @@ export default function App() {
       </header>
 
       <TableView
-        columns={dataset.columns}
+        columns={activeColumns}
         rows={filteredRows}
         activeFilterColumns={activeFilterColumns}
         onRowTap={setOpenRow}
@@ -130,7 +163,7 @@ export default function App() {
 
       {openRow !== null && filteredRows[openRow] && (
         <RowCard
-          columns={dataset.columns}
+          columns={activeColumns}
           rows={filteredRows}
           index={openRow}
           onIndexChange={setOpenRow}
