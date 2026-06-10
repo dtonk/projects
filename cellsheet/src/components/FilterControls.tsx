@@ -1,27 +1,23 @@
-import { useMemo } from 'react';
-import type { Column, Row } from '../types';
-import { distinctValues, type ColumnFilter } from '../lib/filter';
-
-const SET_THRESHOLD = 50;
+import type { ColumnIndex } from '../types';
+import type { ColumnFilter } from '../lib/filter';
 
 interface Props {
-  column: Column;
-  rows: Row[];
+  column: ColumnIndex;
   filter: ColumnFilter | undefined;
   onChange: (filter: ColumnFilter) => void;
 }
 
-/** Type-aware filter inputs for a single column. Shared by the filter sheet and onboarding. */
-export function FilterControls({ column, rows, filter, onChange }: Props) {
+/**
+ * Type-aware filter inputs for a single column. Distinct values come
+ * precomputed from the dataset index, so no rows are needed here.
+ * Shared by the filter sheet and onboarding.
+ */
+export function FilterControls({ column, filter, onChange }: Props) {
   const f: ColumnFilter = filter ?? { type: column.type };
-
-  const distinct = useMemo(
-    () => (column.type === 'text' || column.type === 'boolean'
-      ? distinctValues(rows, column.name, SET_THRESHOLD + 1)
-      : []),
-    [rows, column.name, column.type],
-  );
-  const useChecklist = distinct.length > 0 && distinct.length <= SET_THRESHOLD;
+  const useChecklist =
+    (column.type === 'text' || column.type === 'boolean') &&
+    !column.distinctTruncated &&
+    column.distinct.length > 0;
 
   const toggleValue = (v: string) => {
     const set = new Set(f.values ?? []);
@@ -57,9 +53,9 @@ export function FilterControls({ column, rows, filter, onChange }: Props) {
         />
       )}
 
-      {(column.type === 'text' || column.type === 'boolean') && useChecklist && (
+      {useChecklist && (
         <ul className="flex flex-col">
-          {distinct.map((v) => {
+          {column.distinct.map((v) => {
             const checked = (f.values ?? []).includes(v);
             return (
               <li key={v}>

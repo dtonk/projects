@@ -1,18 +1,17 @@
 import { motion } from 'framer-motion';
-import type { Column, Row } from '../types';
+import type { ColumnIndex } from '../types';
 import type { ColumnFilter } from '../lib/filter';
 import { FilterControls } from './FilterControls';
 
 interface Props {
-  column: Column;
-  rows: Row[];
+  column: ColumnIndex;
   filter: ColumnFilter | undefined;
   onChange: (filter: ColumnFilter) => void;
   onClear: () => void;
   onClose: () => void;
 }
 
-export function ColumnFilterSheet({ column, rows, filter, onChange, onClear, onClose }: Props) {
+export function ColumnFilterSheet({ column, filter, onChange, onClear, onClose }: Props) {
   return (
     <div className="fixed inset-0 z-40 flex flex-col justify-end" onClick={onClose}>
       <div className="absolute inset-0" style={{ background: 'rgba(0,0,0,0.4)' }} />
@@ -38,7 +37,7 @@ export function ColumnFilterSheet({ column, rows, filter, onChange, onClear, onC
           </button>
         </div>
 
-        <FilterControls column={column} rows={rows} filter={filter} onChange={onChange} />
+        <FilterControls column={column} filter={filter} onChange={onChange} />
 
         <button
           type="button"

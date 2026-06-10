@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import type { Column, Dataset } from '../types';
+import type { ColumnIndex, DatasetIndex } from '../types';
 import { isFilterActive, type Filters } from '../lib/filter';
 import { FilterControls } from './FilterControls';
 
@@ -10,19 +10,19 @@ export interface OnboardingConfig {
 }
 
 interface Props {
-  dataset: Dataset;
+  index: DatasetIndex;
   onComplete: (config: OnboardingConfig) => void;
   onCancel: () => void;
 }
 
 type Step = 'name' | 'columns' | 'askFilter' | 'pickColumn' | 'criteria';
 
-function defaultName(dataset: Dataset): string {
-  if (dataset.sourceType === 'file') {
-    return dataset.sourceName.replace(/\.[^.]+$/, '');
+function defaultName(index: DatasetIndex): string {
+  if (index.sourceType === 'file') {
+    return index.sourceName.replace(/\.[^.]+$/, '');
   }
   try {
-    const path = new URL(dataset.sourceName).pathname.split('/').filter(Boolean).pop();
+    const path = new URL(index.sourceName).pathname.split('/').filter(Boolean).pop();
     if (path) return decodeURIComponent(path).replace(/\.[^.]+$/, '');
   } catch {
     /* fall through */
@@ -30,24 +30,24 @@ function defaultName(dataset: Dataset): string {
   return 'Untitled table';
 }
 
-export function Onboarding({ dataset, onComplete, onCancel }: Props) {
+export function Onboarding({ index, onComplete, onCancel }: Props) {
   const [step, setStep] = useState<Step>('name');
-  const [name, setName] = useState(() => defaultName(dataset));
-  const [visible, setVisible] = useState<string[]>(() => dataset.columns.map((c) => c.name));
+  const [name, setName] = useState(() => defaultName(index));
+  const [visible, setVisible] = useState<string[]>(() => index.columns.map((c) => c.name));
   const [filterColName, setFilterColName] = useState<string | null>(null);
   const [filters, setFilters] = useState<Filters>({});
 
-  const allColumns = dataset.columns;
+  const allColumns = index.columns;
   const allSelected = visible.length === allColumns.length;
   const activeFilterCount = Object.values(filters).filter(isFilterActive).length;
-  const filterColumn: Column | undefined = useMemo(
+  const filterColumn: ColumnIndex | undefined = useMemo(
     () => allColumns.find((c) => c.name === filterColName),
     [allColumns, filterColName],
   );
 
   function finish() {
     onComplete({
-      name: name.trim() || defaultName(dataset),
+      name: name.trim() || defaultName(index),
       visibleColumns: visible.length > 0 ? visible : allColumns.map((c) => c.name),
       filters,
     });
@@ -89,7 +89,7 @@ export function Onboarding({ dataset, onComplete, onCancel }: Props) {
       {step === 'name' && (
         <Section
           title="What should we call this table?"
-          subtitle="This name shows at the top instead of the file or URL."
+          subtitle={`${index.rowCount.toLocaleString()} rows · ${index.columns.length} columns. This name shows at the top of the table.`}
           primaryLabel="Next"
           onPrimary={() => setStep('columns')}
         >
@@ -216,7 +216,6 @@ export function Onboarding({ dataset, onComplete, onCancel }: Props) {
         <Section title={`Filter "${filterColumn.name}"`} subtitle="Set the criteria for this column.">
           <FilterControls
             column={filterColumn}
-            rows={dataset.rows}
             filter={filters[filterColumn.name]}
             onChange={(f) => setFilters((prev) => ({ ...prev, [filterColumn.name]: f }))}
           />

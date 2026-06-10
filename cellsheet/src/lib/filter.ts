@@ -75,6 +75,14 @@ function matchesColumnFilter(raw: string, f: ColumnFilter): boolean {
   return true;
 }
 
+/** True when a row passes every active column filter (no search). */
+export function rowMatches(row: Row, filters: Filters): boolean {
+  for (const [name, f] of Object.entries(filters)) {
+    if (isFilterActive(f) && !matchesColumnFilter(row[name] ?? '', f)) return false;
+  }
+  return true;
+}
+
 export function applyFilters(
   rows: Row[],
   columns: Column[],
