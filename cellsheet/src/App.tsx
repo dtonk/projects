@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import type { DatasetIndex, MaterializedData, Source } from './types';
-import { scanFile, scanUrl, materialize } from './lib/parseCsv';
+import { scanFile, scanUrl, materialize, type ProgressInfo } from './lib/parseCsv';
 import { addRecent } from './lib/recents';
 import { applyFilters, isFilterActive, type ColumnFilter, type Filters } from './lib/filter';
 import { OpenScreen } from './components/OpenScreen';
@@ -31,7 +31,8 @@ export default function App() {
   const [phase, setPhase] = useState<Phase>('idle');
   const [progress, setProgress] = useState<number | null>(null);
   const [progressDetail, setProgressDetail] = useState<string | null>(null);
-  const passStartRef = useRef(0);
+  const [progressStage, setProgressStage] = useState<'download' | 'scan'>('download');
+  const scanStartRef = useRef(0);
   const [error, setError] = useState<string | null>(null);
 
   const [index, setIndex] = useState<DatasetIndex | null>(null);
@@ -46,17 +47,26 @@ export default function App() {
   const [filterColumn, setFilterColumn] = useState<string | null>(null);
   const [showHelp, setShowHelp] = useState(false);
 
+  function handleScanProgress(p: ProgressInfo) {
+    setProgress(p.fraction);
+    setProgressStage(p.stage);
+    if (p.stage === 'scan') {
+      if (scanStartRef.current === 0) scanStartRef.current = Date.now();
+      setProgressDetail(estimateRate(scanStartRef.current, p.rows));
+    } else {
+      setProgressDetail(null);
+    }
+  }
+
   async function openUrl(url: string) {
     setError(null);
     setProgress(null);
     setProgressDetail(null);
-    passStartRef.current = Date.now();
+    setProgressStage('download');
+    scanStartRef.current = 0;
     setPhase('scanning');
     try {
-      const scanned = await scanUrl(url, (p) => {
-        setProgress(p.fraction);
-        setProgressDetail(estimateRate(passStartRef.current, p.rows));
-      });
+      const scanned = await scanUrl(url, handleScanProgress);
       addRecent(url);
       sourceRef.current = scanned.source;
       setIndex(scanned.index);
@@ -71,13 +81,11 @@ export default function App() {
     setError(null);
     setProgress(0);
     setProgressDetail(null);
-    passStartRef.current = Date.now();
+    setProgressStage('scan');
+    scanStartRef.current = 0;
     setPhase('scanning');
     try {
-      const scanned = await scanFile(file, (p) => {
-        setProgress(p.fraction);
-        setProgressDetail(estimateRate(passStartRef.current, p.rows));
-      });
+      const scanned = await scanFile(file, handleScanProgress);
       sourceRef.current = scanned.source;
       setIndex(scanned.index);
       setPhase('onboarding');
@@ -145,6 +153,7 @@ export default function App() {
     const param = new URLSearchParams(window.location.search).get('url');
     // Intentional load-on-mount; defer so the state update isn't synchronous.
     if (param) queueMicrotask(() => openUrl(param));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Android PWA "Open with": receive CSV files launched from the OS.
@@ -155,6 +164,7 @@ export default function App() {
       const handle = params.files?.[0];
       if (handle) openFile(await handle.getFile());
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Only the columns the user chose to keep, in original order.
@@ -177,10 +187,15 @@ export default function App() {
   }, [filters]);
 
   if (phase === 'scanning') {
+    const downloading = progressStage === 'download';
     return (
       <ProgressScreen
-        title="Reading your CSV…"
-        subtitle="We are scanning your CSV to understand what's in it. That will allow us to filter it down to a manageable size."
+        title={downloading ? 'Downloading your CSV…' : 'Reading your CSV…'}
+        subtitle={
+          downloading
+            ? 'Fetching the file from the URL. Very large datasets can take a while to arrive from the server.'
+            : "We are scanning your CSV to understand what's in it. That will allow us to filter it down to a manageable size."
+        }
         progress={progress}
         detail={progressDetail}
       />

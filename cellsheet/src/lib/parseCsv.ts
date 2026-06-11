@@ -53,8 +53,10 @@ interface ScanResult {
 export interface ProgressInfo {
   /** 0–1 fraction of bytes processed. */
   fraction: number;
-  /** Rows processed so far. */
+  /** Rows processed so far (scan/materialize only). */
   rows: number;
+  /** Which phase the progress refers to. */
+  stage: 'download' | 'scan';
 }
 
 /**
@@ -101,7 +103,7 @@ function runScan(
           }
         }
         if (onProgress && totalBytes > 0) {
-          onProgress({ fraction: Math.min(results.meta.cursor / totalBytes, 1), rows: rowCount });
+          onProgress({ fraction: Math.min(results.meta.cursor / totalBytes, 1), rows: rowCount, stage: 'scan' });
         }
       },
       complete: () => resolve({ fields, accs, rowCount }),
@@ -143,13 +145,34 @@ export async function scanUrl(url: string, onProgress?: (info: ProgressInfo) => 
     throw new Error('Could not reach that URL (network or CORS).');
   }
   if (!res.ok) throw new Error(`Could not fetch that URL (HTTP ${res.status}).`);
-  // Keep the body as a Blob/File so both passes stream it in chunks rather
+  // Stream the body to a File (reporting download progress when the server
+  // sends a Content-Length) so both passes can re-read it in chunks rather
   // than holding the whole response as one large in-memory string.
-  const blob = await res.blob();
-  const file = new File([blob], 'download.csv', { type: 'text/csv' });
+  const file = await downloadToFile(res, onProgress);
   const scan = await runScan(file, onProgress);
   if (scan.fields.length === 0) throw new Error('No columns found — is this a CSV URL?');
   return { index: buildIndex(scan, url, 'url'), source: { file, name: url, type: 'url' } };
+}
+
+async function downloadToFile(res: Response, onProgress?: (info: ProgressInfo) => void): Promise<File> {
+  const total = Number(res.headers.get('Content-Length')) || 0;
+  const reader = res.body?.getReader();
+  if (!reader) {
+    // Streaming not available — fall back to a single buffered blob.
+    return new File([await res.blob()], 'download.csv', { type: 'text/csv' });
+  }
+  const chunks: BlobPart[] = [];
+  let received = 0;
+  for (;;) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    chunks.push(value);
+    received += value.byteLength;
+    if (onProgress && total > 0) {
+      onProgress({ fraction: Math.min(received / total, 1), rows: 0, stage: 'download' });
+    }
+  }
+  return new File(chunks, 'download.csv', { type: 'text/csv' });
 }
 
 /**
@@ -189,7 +212,7 @@ export function materialize(
           }
         }
         if (onProgress && totalBytes > 0) {
-          onProgress({ fraction: Math.min(results.meta.cursor / totalBytes, 1), rows: rows.length });
+          onProgress({ fraction: Math.min(results.meta.cursor / totalBytes, 1), rows: rows.length, stage: 'scan' });
         }
       },
       complete: () => resolve({ rows, totalRows: index.rowCount, capped, loadedAt: Date.now() }),
