@@ -1,5 +1,5 @@
 {
-  "updated": "2026-06-10T22:49:44.758301+00:00",
+  "updated": "2026-06-11T18:09:20.775455+00:00",
   "jobs": [
     {
       "id": "3743990013505186",
@@ -33,17 +33,6 @@
       "department": "City Administrator",
       "ref_num": "RTF0162668-01158476",
       "released_date": "2026-06-01T18:15:46.933Z"
-    },
-    {
-      "id": "3743990013337236",
-      "title": "Director of Talent Acquisition (0932 Manager IV) - SFO - People, Performance & Development",
-      "url": "https://jobs.smartrecruiters.com/CityAndCountyOfSanFrancisco1/3743990013337236",
-      "class_code": "0932",
-      "class_label": "0932-Manager IV",
-      "employment_type": "Temporary Exempt",
-      "department": "San Francisco International Airport",
-      "ref_num": "RTF0165579-01156016",
-      "released_date": "2026-05-27T20:37:15.658Z"
     },
     {
       "id": "3743990013327482",
