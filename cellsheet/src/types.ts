@@ -27,10 +27,16 @@ export interface DatasetIndex {
   sourceType: 'url' | 'file';
 }
 
-/** The source kept around so the second (materialize) pass can re-read it. */
-export type Source =
-  | { kind: 'file'; file: File }
-  | { kind: 'url'; text: string };
+/**
+ * The source kept around so the second (materialize) pass can re-read it.
+ * For URLs the downloaded body is wrapped in a File so both passes stream it
+ * in chunks (no giant in-memory string).
+ */
+export interface Source {
+  file: File;
+  name: string;
+  type: 'url' | 'file';
+}
 
 /** Rows materialized for viewing: selected columns, filtered, and capped. */
 export interface MaterializedData {

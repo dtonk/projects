@@ -18,9 +18,20 @@ type Phase = 'idle' | 'scanning' | 'onboarding' | 'materializing' | 'viewing';
 const SEEN_HELP_KEY = 'cellsheet:seenTableHelp';
 const ROW_CAP = 50_000;
 
+/** A live "seconds per 10k rows" estimate once we have enough signal. */
+function estimateRate(startMs: number, rows: number): string | null {
+  const elapsed = (Date.now() - startMs) / 1000;
+  if (rows < 2000 || elapsed < 0.25) return null;
+  const per10k = (elapsed / rows) * 10000;
+  const s = per10k < 1 ? per10k.toFixed(1) : Math.round(per10k).toString();
+  return `Each 10,000 rows takes about ${s}s · ${rows.toLocaleString()} scanned`;
+}
+
 export default function App() {
   const [phase, setPhase] = useState<Phase>('idle');
   const [progress, setProgress] = useState<number | null>(null);
+  const [progressDetail, setProgressDetail] = useState<string | null>(null);
+  const passStartRef = useRef(0);
   const [error, setError] = useState<string | null>(null);
 
   const [index, setIndex] = useState<DatasetIndex | null>(null);
@@ -38,9 +49,14 @@ export default function App() {
   async function openUrl(url: string) {
     setError(null);
     setProgress(null);
+    setProgressDetail(null);
+    passStartRef.current = Date.now();
     setPhase('scanning');
     try {
-      const scanned = await scanUrl(url, setProgress);
+      const scanned = await scanUrl(url, (p) => {
+        setProgress(p.fraction);
+        setProgressDetail(estimateRate(passStartRef.current, p.rows));
+      });
       addRecent(url);
       sourceRef.current = scanned.source;
       setIndex(scanned.index);
@@ -54,9 +70,14 @@ export default function App() {
   async function openFile(file: File) {
     setError(null);
     setProgress(0);
+    setProgressDetail(null);
+    passStartRef.current = Date.now();
     setPhase('scanning');
     try {
-      const scanned = await scanFile(file, setProgress);
+      const scanned = await scanFile(file, (p) => {
+        setProgress(p.fraction);
+        setProgressDetail(estimateRate(passStartRef.current, p.rows));
+      });
       sourceRef.current = scanned.source;
       setIndex(scanned.index);
       setPhase('onboarding');
@@ -77,6 +98,7 @@ export default function App() {
     setOpenRow(null);
     setFilterColumn(null);
     setProgress(0);
+    setProgressDetail(null);
     setPhase('materializing');
     try {
       const data = await materialize(
@@ -85,7 +107,7 @@ export default function App() {
         config.visibleColumns,
         config.filters,
         ROW_CAP,
-        setProgress,
+        (p) => setProgress(p.fraction),
       );
       setDataset(data);
       setPhase('viewing');
@@ -158,8 +180,9 @@ export default function App() {
     return (
       <ProgressScreen
         title="Reading your CSV…"
-        subtitle="Scanning columns and values. Nothing is uploaded — this all happens on your device."
+        subtitle="We are scanning your CSV to understand what's in it. That will allow us to filter it down to a manageable size."
         progress={progress}
+        detail={progressDetail}
       />
     );
   }

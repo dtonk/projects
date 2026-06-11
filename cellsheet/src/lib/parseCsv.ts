@@ -50,24 +50,30 @@ interface ScanResult {
   rowCount: number;
 }
 
+export interface ProgressInfo {
+  /** 0–1 fraction of bytes processed. */
+  fraction: number;
+  /** Rows processed so far. */
+  rows: number;
+}
+
 /**
  * Stream the whole input once (in a worker) building only a lightweight index:
  * column types, capped distinct values, and a row count. No rows are kept.
  */
 function runScan(
-  input: File | string,
-  totalBytes: number,
-  onProgress?: (fraction: number) => void,
+  file: File,
+  onProgress?: (info: ProgressInfo) => void,
 ): Promise<ScanResult> {
+  const totalBytes = file.size;
   return new Promise((resolve, reject) => {
     let fields: string[] = [];
     const accs = new Map<string, ColAccumulator>();
     let rowCount = 0;
 
-    Papa.parse<Row>(input as string, {
+    Papa.parse<Row>(file, {
       header: true,
       skipEmptyLines: 'greedy',
-      worker: true,
       chunk: (results: ParseResult<Row>) => {
         if (fields.length === 0 && results.meta.fields) {
           fields = results.meta.fields;
@@ -95,7 +101,7 @@ function runScan(
           }
         }
         if (onProgress && totalBytes > 0) {
-          onProgress(Math.min(results.meta.cursor / totalBytes, 1));
+          onProgress({ fraction: Math.min(results.meta.cursor / totalBytes, 1), rows: rowCount });
         }
       },
       complete: () => resolve({ fields, accs, rowCount }),
@@ -123,13 +129,13 @@ export interface Scanned {
   source: Source;
 }
 
-export async function scanFile(file: File, onProgress?: (f: number) => void): Promise<Scanned> {
-  const scan = await runScan(file, file.size, onProgress);
+export async function scanFile(file: File, onProgress?: (info: ProgressInfo) => void): Promise<Scanned> {
+  const scan = await runScan(file, onProgress);
   if (scan.fields.length === 0) throw new Error('No columns found — is this a CSV file?');
-  return { index: buildIndex(scan, file.name, 'file'), source: { kind: 'file', file } };
+  return { index: buildIndex(scan, file.name, 'file'), source: { file, name: file.name, type: 'file' } };
 }
 
-export async function scanUrl(url: string, onProgress?: (f: number) => void): Promise<Scanned> {
+export async function scanUrl(url: string, onProgress?: (info: ProgressInfo) => void): Promise<Scanned> {
   let res: Response;
   try {
     res = await fetch(url);
@@ -137,10 +143,13 @@ export async function scanUrl(url: string, onProgress?: (f: number) => void): Pr
     throw new Error('Could not reach that URL (network or CORS).');
   }
   if (!res.ok) throw new Error(`Could not fetch that URL (HTTP ${res.status}).`);
-  const text = await res.text();
-  const scan = await runScan(text, text.length, onProgress);
+  // Keep the body as a Blob/File so both passes stream it in chunks rather
+  // than holding the whole response as one large in-memory string.
+  const blob = await res.blob();
+  const file = new File([blob], 'download.csv', { type: 'text/csv' });
+  const scan = await runScan(file, onProgress);
   if (scan.fields.length === 0) throw new Error('No columns found — is this a CSV URL?');
-  return { index: buildIndex(scan, url, 'url'), source: { kind: 'url', text } };
+  return { index: buildIndex(scan, url, 'url'), source: { file, name: url, type: 'url' } };
 }
 
 /**
@@ -153,20 +162,18 @@ export function materialize(
   selectedColumns: string[],
   filters: Filters,
   cap: number,
-  onProgress?: (fraction: number) => void,
+  onProgress?: (info: ProgressInfo) => void,
 ): Promise<MaterializedData> {
-  const input: File | string = source.kind === 'file' ? source.file : source.text;
-  const totalBytes = source.kind === 'file' ? source.file.size : source.text.length;
+  const totalBytes = source.file.size;
 
   return new Promise((resolve, reject) => {
     const rows: Row[] = [];
     let capped = false;
     let stopped = false;
 
-    Papa.parse<Row>(input as string, {
+    Papa.parse<Row>(source.file, {
       header: true,
       skipEmptyLines: 'greedy',
-      worker: true,
       chunk: (results: ParseResult<Row>, parser: Parser) => {
         if (stopped) return;
         for (const row of results.data) {
@@ -182,7 +189,7 @@ export function materialize(
           }
         }
         if (onProgress && totalBytes > 0) {
-          onProgress(Math.min(results.meta.cursor / totalBytes, 1));
+          onProgress({ fraction: Math.min(results.meta.cursor / totalBytes, 1), rows: rows.length });
         }
       },
       complete: () => resolve({ rows, totalRows: index.rowCount, capped, loadedAt: Date.now() }),

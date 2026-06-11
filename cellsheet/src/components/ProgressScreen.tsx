@@ -3,9 +3,11 @@ interface Props {
   subtitle?: string;
   /** 0–1, or null for an indeterminate state (e.g. while downloading). */
   progress: number | null;
+  /** Optional line shown under the bar (e.g. a rate estimate). */
+  detail?: string | null;
 }
 
-export function ProgressScreen({ title, subtitle, progress }: Props) {
+export function ProgressScreen({ title, subtitle, progress, detail }: Props) {
   const pct = progress == null ? null : Math.round(progress * 100);
 
   return (
@@ -36,6 +38,11 @@ export function ProgressScreen({ title, subtitle, progress }: Props) {
       <p className="mt-3 text-sm tabular-nums" style={{ color: 'var(--muted)' }}>
         {pct == null ? 'Working…' : `${pct}%`}
       </p>
+      {detail && (
+        <p className="mt-1 text-center text-xs tabular-nums" style={{ color: 'var(--muted)' }}>
+          {detail}
+        </p>
+      )}
 
       <style>{`@keyframes cs-pulse { 0%,100% { opacity: .4 } 50% { opacity: 1 } }`}</style>
     </div>
