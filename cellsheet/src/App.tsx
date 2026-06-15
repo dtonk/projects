@@ -347,6 +347,7 @@ export default function App() {
               activeSort={sort?.column === activeColumn.name ? sort.dir : null}
               onSort={(dir) => setSort({ column: activeColumn.name, dir })}
               onClearSort={() => setSort(null)}
+              rows={sortedRows}
             />
           )}
         </AnimatePresence>
