@@ -18,7 +18,7 @@ type Phase = 'idle' | 'scanning' | 'onboarding' | 'materializing' | 'viewing';
 const SEEN_HELP_KEY = 'cellsheet:seenTableHelp';
 const ROW_CAP = 50_000;
 
-type SortState = { column: string; dir: 'asc' | 'desc' } | null;
+type SortState = { name: string; dir: 'asc' | 'desc' } | null;
 
 function sortRows(rows: Row[], col: Column, dir: 'asc' | 'desc'): Row[] {
   return [...rows].sort((a, b) => {
@@ -220,7 +220,7 @@ export default function App() {
 
   const sortedRows = useMemo(() => {
     if (!sort) return filteredRows;
-    const col = activeColumns.find((c) => c.name === sort.column);
+    const col = activeColumns.find((c) => c.name === sort.name);
     if (!col) return filteredRows;
     return sortRows(filteredRows, col, sort.dir);
   }, [filteredRows, sort, activeColumns]);
@@ -345,8 +345,8 @@ export default function App() {
                 })
               }
               onClose={() => setFilterColumn(null)}
-              activeSort={sort?.column === activeColumn.name ? sort.dir : null}
-              onSort={(dir) => setSort({ column: activeColumn.name, dir })}
+              activeSort={sort?.name === activeColumn.name ? sort.dir : null}
+              onSort={(dir) => setSort({ name: activeColumn.name, dir })}
               onClearSort={() => setSort(null)}
               rows={sortedRows}
             />
