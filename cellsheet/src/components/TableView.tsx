@@ -6,6 +6,7 @@ interface Props {
   columns: Column[];
   rows: Row[];
   activeFilterColumns: Set<string>;
+  sortColumn: { name: string; dir: 'asc' | 'desc' } | null;
   onRowTap: (index: number) => void;
   onColumnTap: (name: string) => void;
 }
@@ -18,6 +19,7 @@ export function TableView({
   columns,
   rows,
   activeFilterColumns,
+  sortColumn,
   onRowTap,
   onColumnTap,
 }: Props) {
@@ -61,7 +63,11 @@ export function TableView({
                 title={c.name}
               >
                 <span className="truncate">{c.name}</span>
-                <span style={{ color: 'var(--muted)' }}>{active ? '●' : '⌄'}</span>
+                <span style={{ color: 'var(--muted)' }}>
+                  {sortColumn?.name === c.name
+                    ? sortColumn.dir === 'asc' ? '↑' : '↓'
+                    : active ? '●' : '⌄'}
+                </span>
               </button>
             );
           })}

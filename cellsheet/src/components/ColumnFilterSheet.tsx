@@ -9,9 +9,12 @@ interface Props {
   onChange: (filter: ColumnFilter) => void;
   onClear: () => void;
   onClose: () => void;
+  activeSort: 'asc' | 'desc' | null;
+  onSort: (dir: 'asc' | 'desc') => void;
+  onClearSort: () => void;
 }
 
-export function ColumnFilterSheet({ column, filter, onChange, onClear, onClose }: Props) {
+export function ColumnFilterSheet({ column, filter, onChange, onClear, onClose, activeSort, onSort, onClearSort }: Props) {
   return (
     <div className="fixed inset-0 z-40 flex flex-col justify-end" onClick={onClose}>
       <div className="absolute inset-0" style={{ background: 'rgba(0,0,0,0.4)' }} />
@@ -35,6 +38,27 @@ export function ColumnFilterSheet({ column, filter, onChange, onClear, onClose }
           <button type="button" onClick={onClear} className="text-sm" style={{ color: 'var(--accent)' }}>
             Clear
           </button>
+        </div>
+
+        <div className="mb-4 flex gap-2">
+          {(['asc', 'desc'] as const).map((dir) => {
+            const on = activeSort === dir;
+            return (
+              <button
+                key={dir}
+                type="button"
+                onClick={() => (on ? onClearSort() : onSort(dir))}
+                className="flex-1 rounded-xl py-2 text-sm font-medium"
+                style={{
+                  background: on ? 'var(--accent)' : 'var(--bg-soft)',
+                  color: on ? '#fff' : 'var(--label)',
+                  border: '1px solid var(--border)',
+                }}
+              >
+                {dir === 'asc' ? '↑ Ascending' : '↓ Descending'}
+              </button>
+            );
+          })}
         </div>
 
         <FilterControls column={column} filter={filter} onChange={onChange} />

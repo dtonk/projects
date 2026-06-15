@@ -3,7 +3,7 @@ import type { ColumnIndex, ColumnType, DatasetIndex, MaterializedData, Row, Sour
 import { rowMatches, type Filters } from './filter';
 
 const SAMPLE_SIZE = 200;
-const DISTINCT_CAP = 50;
+const DISTINCT_CAP = 200;
 
 const DATE_RE =
   /^\d{4}-\d{1,2}-\d{1,2}([ T]\d{1,2}:\d{2}(:\d{2})?)?|^\d{1,2}\/\d{1,2}\/\d{2,4}/;

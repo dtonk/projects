@@ -43,14 +43,23 @@ export function FilterControls({ column, filter, onChange }: Props) {
       )}
 
       {(column.type === 'text' || column.type === 'boolean') && !useChecklist && (
-        <input
-          value={f.contains ?? ''}
-          onChange={(e) => onChange({ ...f, contains: e.target.value })}
-          placeholder="Contains…"
-          autoCapitalize="off"
-          className="w-full rounded-xl border px-3 py-3 text-base outline-none"
-          style={{ borderColor: 'var(--border)', background: 'var(--bg-soft)' }}
-        />
+        <div className="flex flex-col gap-2">
+          {column.distinctTruncated && (
+            <p className="text-xs" style={{ color: 'var(--muted)' }}>
+              This field has more than 200 unique values — use the search box below,
+              or try a wildcard like <span className="font-mono">oak*</span> to match
+              anything starting with "oak".
+            </p>
+          )}
+          <input
+            value={f.contains ?? ''}
+            onChange={(e) => onChange({ ...f, contains: e.target.value })}
+            placeholder="Contains…"
+            autoCapitalize="off"
+            className="w-full rounded-xl border px-3 py-3 text-base outline-none"
+            style={{ borderColor: 'var(--border)', background: 'var(--bg-soft)' }}
+          />
+        </div>
       )}
 
       {useChecklist && (

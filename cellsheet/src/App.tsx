@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { AnimatePresence } from 'framer-motion';
-import type { DatasetIndex, MaterializedData, Source } from './types';
+import type { Column, DatasetIndex, MaterializedData, Row, Source } from './types';
 import { scanFile, scanUrl, materialize, type ProgressInfo } from './lib/parseCsv';
 import { addRecent } from './lib/recents';
 import { applyFilters, isFilterActive, type ColumnFilter, type Filters } from './lib/filter';
@@ -17,6 +17,43 @@ type Phase = 'idle' | 'scanning' | 'onboarding' | 'materializing' | 'viewing';
 
 const SEEN_HELP_KEY = 'cellsheet:seenTableHelp';
 const ROW_CAP = 50_000;
+
+type SortState = { column: string; dir: 'asc' | 'desc' } | null;
+
+function sortRows(rows: Row[], col: Column, dir: 'asc' | 'desc'): Row[] {
+  return [...rows].sort((a, b) => {
+    const av = a[col.name] ?? '';
+    const bv = b[col.name] ?? '';
+    let cmp: number;
+    if (col.type === 'number') {
+      const an = Number(av.replace(/,/g, ''));
+      const bn = Number(bv.replace(/,/g, ''));
+      cmp = (Number.isNaN(an) ? Infinity : an) - (Number.isNaN(bn) ? Infinity : bn);
+    } else if (col.type === 'date') {
+      const at = Date.parse(av);
+      const bt = Date.parse(bv);
+      cmp = (Number.isNaN(at) ? Infinity : at) - (Number.isNaN(bt) ? Infinity : bt);
+    } else {
+      cmp = av.localeCompare(bv);
+    }
+    return dir === 'asc' ? cmp : -cmp;
+  });
+}
+
+function exportToCsv(columns: Column[], rows: Row[], name: string) {
+  const escape = (v: string) => (/[,"\n\r]/.test(v) ? `"${v.replace(/"/g, '""')}"` : v);
+  const lines = [
+    columns.map((c) => escape(c.name)).join(','),
+    ...rows.map((row) => columns.map((c) => escape(row[c.name] ?? '')).join(',')),
+  ];
+  const blob = new Blob([lines.join('\n')], { type: 'text/csv' });
+  const url = URL.createObjectURL(blob);
+  const a = Object.assign(document.createElement('a'), { href: url, download: `${name || 'export'}.csv` });
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
 
 /** A live "seconds per 10k rows" estimate once we have enough signal. */
 function estimateRate(startMs: number, rows: number): string | null {
@@ -45,6 +82,7 @@ export default function App() {
   const [filters, setFilters] = useState<Filters>({});
   const [openRow, setOpenRow] = useState<number | null>(null);
   const [filterColumn, setFilterColumn] = useState<string | null>(null);
+  const [sort, setSort] = useState<SortState>(null);
   const [showHelp, setShowHelp] = useState(false);
 
   function handleScanProgress(p: ProgressInfo) {
@@ -105,6 +143,7 @@ export default function App() {
     setFilters({});
     setOpenRow(null);
     setFilterColumn(null);
+    setSort(null);
     setProgress(0);
     setProgressDetail(null);
     setPhase('materializing');
@@ -136,6 +175,7 @@ export default function App() {
     setFilters({});
     setOpenRow(null);
     setFilterColumn(null);
+    setSort(null);
     setShowHelp(false);
   }
 
@@ -177,6 +217,13 @@ export default function App() {
     if (!dataset) return [];
     return applyFilters(dataset.rows, activeColumns, filters, search);
   }, [dataset, activeColumns, filters, search]);
+
+  const sortedRows = useMemo(() => {
+    if (!sort) return filteredRows;
+    const col = activeColumns.find((c) => c.name === sort.column);
+    if (!col) return filteredRows;
+    return sortRows(filteredRows, col, sort.dir);
+  }, [filteredRows, sort, activeColumns]);
 
   const activeFilterColumns = useMemo(() => {
     const set = new Set<string>();
@@ -233,6 +280,14 @@ export default function App() {
               >
                 ?
               </button>
+              <button
+                type="button"
+                onClick={() => exportToCsv(activeColumns, sortedRows, tableName)}
+                className="text-sm"
+                style={{ color: 'var(--accent)' }}
+              >
+                Export
+              </button>
               <button type="button" onClick={backToOpen}
                 className="text-sm" style={{ color: 'var(--accent)' }}>
                 Open another
@@ -255,16 +310,17 @@ export default function App() {
 
         <TableView
           columns={activeColumns}
-          rows={filteredRows}
+          rows={sortedRows}
           activeFilterColumns={activeFilterColumns}
+          sortColumn={sort}
           onRowTap={setOpenRow}
           onColumnTap={setFilterColumn}
         />
 
-        {openRow !== null && filteredRows[openRow] && (
+        {openRow !== null && sortedRows[openRow] && (
           <RowCard
             columns={activeColumns}
-            rows={filteredRows}
+            rows={sortedRows}
             index={openRow}
             onIndexChange={setOpenRow}
             onClose={() => setOpenRow(null)}
@@ -288,6 +344,9 @@ export default function App() {
                 })
               }
               onClose={() => setFilterColumn(null)}
+              activeSort={sort?.column === activeColumn.name ? sort.dir : null}
+              onSort={(dir) => setSort({ column: activeColumn.name, dir })}
+              onClearSort={() => setSort(null)}
             />
           )}
         </AnimatePresence>
