@@ -7,6 +7,7 @@ interface Props {
   columns: Column[];
   rows: Row[];
   index: number;
+  tableName: string;
   onIndexChange: (index: number) => void;
   onClose: () => void;
 }
@@ -19,9 +20,14 @@ const variants = {
   exit: (dir: number) => ({ x: dir > 0 ? '-110%' : '110%', opacity: 0 }),
 };
 
-export function RowCard({ columns, rows, index, onIndexChange, onClose }: Props) {
+export function RowCard({ columns, rows, index, tableName, onIndexChange, onClose }: Props) {
   const [dir, setDir] = useState(0);
   const row = rows[index];
+
+  function handleShare() {
+    const text = columns.map((c) => `${c.name}: ${row[c.name] || '—'}`).join('\n');
+    navigator.share({ title: `${tableName} · Row ${index + 1}`, text }).catch(() => {});
+  }
 
   const paginate = (delta: number) => {
     const next = index + delta;
@@ -87,9 +93,16 @@ export function RowCard({ columns, rows, index, onIndexChange, onClose }: Props)
                   <span className="font-bold">Row</span> {index + 1}{' '}
                   <span className="font-bold">of</span> {rows.length}
                 </span>
-                <button type="button" onClick={onClose} className="text-sm font-medium" style={{ color: 'var(--accent)' }}>
-                  Done
-                </button>
+                <div className="flex items-center gap-3">
+                  {'share' in navigator && (
+                    <button type="button" onClick={handleShare} className="text-sm font-medium" style={{ color: 'var(--accent)' }}>
+                      Share
+                    </button>
+                  )}
+                  <button type="button" onClick={onClose} className="text-sm font-medium" style={{ color: 'var(--accent)' }}>
+                    Done
+                  </button>
+                </div>
               </div>
 
               {/* Inline fields: "Label: value", label bold */}

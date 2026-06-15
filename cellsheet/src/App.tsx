@@ -322,6 +322,7 @@ export default function App() {
             columns={activeColumns}
             rows={sortedRows}
             index={openRow}
+            tableName={tableName}
             onIndexChange={setOpenRow}
             onClose={() => setOpenRow(null)}
           />
