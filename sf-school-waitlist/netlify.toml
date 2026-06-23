@@ -1,0 +1,8 @@
+[build]
+  publish = "."
+
+[[redirects]]
+  from = "/api/school_waitlists.json"
+  to = "https://pub-4b600ed6f592436bbfbcffa049c4dc4b.r2.dev/feeds/school_waitlists.json"
+  status = 200
+  force = true
