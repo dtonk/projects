@@ -175,7 +175,7 @@ const GRADE_ORDER = ['TK','K','1','2','3','4','5','6','7','8','9','10','11','12'
 let WAITLIST_DATA = [];
 let ALL_SCHOOLS = [];
 let currentMetric = 'current';
-let currentGrade = '';
+let currentGrade = 'K';
 let currentProgram = '';
 
 const gradeSelect = document.getElementById('grade-filter');
@@ -229,10 +229,7 @@ function aggregate() {
     });
   });
 
-  return Object.values(bySchool).filter(d => {
-    const val = currentMetric === 'current' ? d.currentWaitlist : d.initialWaitlist;
-    return val > 0;
-  }).sort((a, b) => {
+  return Object.values(bySchool).sort((a, b) => {
     const key = currentMetric === 'current' ? 'currentWaitlist' : 'initialWaitlist';
     return b[key] - a[key];
   });
@@ -330,10 +327,10 @@ function updateLayers() {
     id: 'waitlist-columns',
     data: data,
     getPosition: d => [d.lng, d.lat],
-    getElevation: d => d[key],
+    getElevation: d => d[key] || 0.5,
     elevationScale: 15,
     radius: 80,
-    getFillColor: d => colorForValue(d[key], maxVal),
+    getFillColor: d => d[key] === 0 ? [100, 100, 140, 160] : colorForValue(d[key], maxVal),
     pickable: true,
     onHover: showTooltip,
     autoHighlight: true,
@@ -391,6 +388,7 @@ function populateFilters() {
   grades.forEach(g => {
     const opt = document.createElement('option');
     opt.value = g; opt.textContent = g;
+    if (g === currentGrade) opt.selected = true;
     gradeSelect.appendChild(opt);
   });
 
