@@ -216,6 +216,7 @@ function aggregate() {
         school: d.school, lat: d.lat, lng: d.lng,
         addr: d.address, neighborhood: d.neighborhood,
         currentWaitlist: 0, initialWaitlist: 0, offersMade: 0, offersLastYear: 0,
+        waitlistChange: 0, offersChange: 0,
         details: [],
       };
     }
@@ -223,9 +224,12 @@ function aggregate() {
     bySchool[key].initialWaitlist += d.initial_waitlist;
     bySchool[key].offersMade += d.offers_made;
     bySchool[key].offersLastYear += d.offers_last_year;
+    bySchool[key].waitlistChange += d.waitlist_change || 0;
+    bySchool[key].offersChange += d.offers_change || 0;
     bySchool[key].details.push({
       grade: d.grade, program: d.program,
       cw: d.current_waitlist, iw: d.initial_waitlist, om: d.offers_made,
+      wc: d.waitlist_change || 0,
     });
   });
 
@@ -254,6 +258,13 @@ function showTooltip(info) {
   const otherKey = currentMetric === 'current' ? 'initialWaitlist' : 'currentWaitlist';
   const otherLabel = currentMetric === 'current' ? 'Initial Waitlist' : 'Current Waitlist';
 
+  function delta(val) {
+    if (!val) return '';
+    const color = val < 0 ? '#4CAF50' : '#F44336';
+    const sign = val > 0 ? '+' : '';
+    return ` <span style="color:${color};font-size:11px">(${sign}${val})</span>`;
+  }
+
   const topDetails = d.details
     .sort((a, b) => (currentMetric === 'current' ? b.cw - a.cw : b.iw - a.iw))
     .slice(0, 5);
@@ -264,7 +275,7 @@ function showTooltip(info) {
     topDetails.forEach(det => {
       const val = currentMetric === 'current' ? det.cw : det.iw;
       const label = (det.grade ? det.grade + ' - ' : '') + det.program;
-      breakdownHtml += `<div class="tt-breakdown-row"><span>${label}</span><span class="tt-breakdown-val">${val}</span></div>`;
+      breakdownHtml += `<div class="tt-breakdown-row"><span>${label}</span><span class="tt-breakdown-val">${val}${currentMetric === 'current' ? delta(det.wc) : ''}</span></div>`;
     });
     if (d.details.length > 5) {
       breakdownHtml += `<div class="tt-breakdown-row" style="color:#555"><span>+ ${d.details.length - 5} more</span></div>`;
@@ -277,7 +288,7 @@ function showTooltip(info) {
     <div class="tt-addr">${d.addr} &middot; ${d.neighborhood}</div>
     <div class="tt-metric">
       <span class="tt-metric-label">${metricLabel}</span>
-      <span class="tt-metric-value highlight">${d[key].toLocaleString()}</span>
+      <span class="tt-metric-value highlight">${d[key].toLocaleString()}${currentMetric === 'current' ? delta(d.waitlistChange) : ''}</span>
     </div>
     <div class="tt-metric">
       <span class="tt-metric-label">${otherLabel}</span>
@@ -285,7 +296,7 @@ function showTooltip(info) {
     </div>
     <div class="tt-metric">
       <span class="tt-metric-label">Offers Made</span>
-      <span class="tt-metric-value">${d.offersMade.toLocaleString()}</span>
+      <span class="tt-metric-value">${d.offersMade.toLocaleString()}${delta(d.offersChange)}</span>
     </div>
     <div class="tt-metric">
       <span class="tt-metric-label">Offers Last Year</span>
