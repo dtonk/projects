@@ -1,6 +1,17 @@
 {
-  "updated": "2026-07-01T17:09:41.428150+00:00",
+  "updated": "2026-07-01T22:15:01.458853+00:00",
   "jobs": [
+    {
+      "id": "3743990013885786",
+      "title": "Senior Data Engineer (1043) - DataSF - Office of City Administrator",
+      "url": "https://jobs.smartrecruiters.com/CityAndCountyOfSanFrancisco1/3743990013885786",
+      "class_code": "1043",
+      "class_label": "1043-IS Engineer-Senior",
+      "employment_type": "Permanent Exempt",
+      "department": "City Administrator",
+      "ref_num": "RTF0162668-01158476",
+      "released_date": "2026-07-01T17:28:31.919Z"
+    },
     {
       "id": "3743990013882536",
       "title": "Director of Public Affairs (0953 Deputy Director III) - DPH - EXEMPT",
@@ -57,17 +68,6 @@
       "released_date": "2026-06-17T22:31:42.055Z"
     },
     {
-      "id": "3743990013665326",
-      "title": "Senior Data Engineer (1043) - DataSF - Office of City Administrator",
-      "url": "https://jobs.smartrecruiters.com/CityAndCountyOfSanFrancisco1/3743990013665326",
-      "class_code": "1043",
-      "class_label": "1043-IS Engineer-Senior",
-      "employment_type": "Permanent Exempt",
-      "department": "City Administrator",
-      "ref_num": "RTF0162668-01158476",
-      "released_date": "2026-06-17T16:09:05.271Z"
-    },
-    {
       "id": "3743990013611246",
       "title": "Deputy Director for Programs - Department of Homelessness and Supportive Housing (PEX 0953)",
       "url": "https://jobs.smartrecruiters.com/CityAndCountyOfSanFrancisco1/3743990013611246",
@@ -88,17 +88,6 @@
       "department": "Fire Department",
       "ref_num": "RTF0161213-01124052",
       "released_date": "2026-06-03T17:37:46.673Z"
-    },
-    {
-      "id": "3743990013327482",
-      "title": "Physician Director of Jail Health Services (0943 Manager VIII) - Department of Public Health - EXEMPT",
-      "url": "https://jobs.smartrecruiters.com/CityAndCountyOfSanFrancisco1/3743990013327482",
-      "class_code": "0943",
-      "class_label": "0943-Manager VIII",
-      "employment_type": "Permanent Exempt",
-      "department": "Public Health",
-      "ref_num": "RTF0163725-01088993",
-      "released_date": "2026-05-27T15:28:32.842Z"
     },
     {
       "id": "3743990013242462",
