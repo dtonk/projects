@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>emPloyeeMarket — Prediction markets for one guy's job search</title>
+<meta name="description" content="A parody prediction market. The only thing being traded is whether Dan gets a new job before the robots take everyone's." />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💼</text></svg>" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<div class="disclaimer-bar">
+  ⚠️ <strong>Parody site — this is not a real prediction market.</strong> Not affiliated with, endorsed by, or related to Polymarket in any way. <strong>No real money, no blockchain, no wallets</strong> — every "bet" is a client-side random number that's forgotten the moment you reload. Purely a joke. Please don't sue me.
+</div>
+
+<header class="site-header">
+  <div class="header-inner">
+    <div class="logo"><span class="logo-dim">em</span><span class="logo-bold">Ployeemarket</span></div>
+    <nav class="header-actions">
+      <div class="portfolio">Portfolio&nbsp;<strong>$0.00</strong></div>
+      <button class="wallet-btn" id="walletBtn">Connect Wallet</button>
+    </nav>
+  </div>
+  <div class="subnav">
+    <div class="subnav-inner">
+      <a href="index.html" class="subnav-link active">Trending</a>
+      <a href="about.html" class="subnav-link">About</a>
+    </div>
+  </div>
+</header>
+
+<main class="page">
+  <section class="market-group" id="group-dan">
+    <div class="group-header">
+      <h2>🧑‍💼 Will Dan get a new job?</h2>
+      <span class="group-sub">Historically, a bad bet.</span>
+    </div>
+    <div class="card-grid" id="danMarkets"></div>
+  </section>
+
+  <section class="market-group" id="group-ai">
+    <div class="group-header">
+      <h2>🤖 When does AI take everyone's job?</h2>
+      <span class="group-sub">Historically, a good bet.</span>
+    </div>
+    <div class="card-grid" id="aiMarkets"></div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <p>
+    emPloyeeMarket.net is a parody website created for entertainment purposes only. It is a complete visual
+    parity of <a href="https://polymarket.com" target="_blank" rel="noopener noreferrer">Polymarket</a>'s
+    design, built as a joke and not for profit, commercial gain, or to mislead anyone into thinking real
+    money or real markets are involved. emPloyeeMarket is not affiliated with, sponsored by, or endorsed by
+    Polymarket in any way. All trademarks belong to their respective owners. No wagers here are real, no
+    data is stored anywhere, and no wallet is ever actually connected. Every odds number is invented by
+    Dan and randomized in your browser. Please don't sue me.
+  </p>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
