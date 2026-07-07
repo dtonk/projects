@@ -1,5 +1,5 @@
 {
-  "updated": "2026-07-06T22:10:22.547909+00:00",
+  "updated": "2026-07-07T17:08:29.749191+00:00",
   "jobs": [
     {
       "id": "3743990013885786",
@@ -44,28 +44,6 @@
       "department": "Police",
       "ref_num": "REF60613W",
       "released_date": "2026-06-24T23:44:26.641Z"
-    },
-    {
-      "id": "3743990013748197",
-      "title": "Senior User Research Analyst - Port of San Francisco (9976)  ",
-      "url": "https://jobs.smartrecruiters.com/CityAndCountyOfSanFrancisco1/3743990013748197",
-      "class_code": "9976",
-      "class_label": "9976-Technology Expert I",
-      "employment_type": "Temporary Exempt",
-      "department": "Port",
-      "ref_num": "RTF0164301-01159215",
-      "released_date": "2026-06-23T17:09:19.028Z"
-    },
-    {
-      "id": "3743990013676246",
-      "title": "Modernization Engineering Project Lead - Port of San Francisco (9976)",
-      "url": "https://jobs.smartrecruiters.com/CityAndCountyOfSanFrancisco1/3743990013676246",
-      "class_code": "9976",
-      "class_label": "9976-Technology Expert I",
-      "employment_type": "Temporary Exempt",
-      "department": "Port",
-      "ref_num": "RTF0163977-01159178",
-      "released_date": "2026-06-17T22:31:42.055Z"
     },
     {
       "id": "3743990013611246",
@@ -121,17 +99,6 @@
       "department": "Technology",
       "ref_num": "REF60426L",
       "released_date": "2026-04-24T17:26:03.972Z"
-    },
-    {
-      "id": "3743990012625546",
-      "title": "Principal System Integration Engineer (Enterprise Systems), Python (1064) \u2013 Department of Technology",
-      "url": "https://jobs.smartrecruiters.com/CityAndCountyOfSanFrancisco1/3743990012625546",
-      "class_code": "1064",
-      "class_label": "1064-IS Programmer Analyst-Principal",
-      "employment_type": "Temporary Exempt",
-      "department": "Technology",
-      "ref_num": "RTF0160953-01145751",
-      "released_date": "2026-04-15T21:09:19.958Z"
     },
     {
       "id": "3743990012072117",
