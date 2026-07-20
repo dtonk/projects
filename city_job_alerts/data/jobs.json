@@ -1,5 +1,5 @@
 {
-  "updated": "2026-07-19T21:46:52.933146+00:00",
+  "updated": "2026-07-20T16:21:12.483172+00:00",
   "jobs": [
     {
       "id": "3743990014151766",
@@ -22,17 +22,6 @@
       "department": "Technology",
       "ref_num": "RTF0160159-01018744",
       "released_date": "2026-07-15T22:10:21.420Z"
-    },
-    {
-      "id": "3743990013991771",
-      "title": "Senior Data Engineer (1043) - DataSF - Office of City Administrator",
-      "url": "https://jobs.smartrecruiters.com/CityAndCountyOfSanFrancisco1/3743990013991771",
-      "class_code": "1043",
-      "class_label": "1043-IS Engineer-Senior",
-      "employment_type": "Permanent Exempt",
-      "department": "City Administrator",
-      "ref_num": "RTF0162668-01158476",
-      "released_date": "2026-07-08T21:02:26.997Z"
     },
     {
       "id": "3743990013986716",
