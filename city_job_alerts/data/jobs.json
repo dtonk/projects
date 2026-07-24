@@ -1,5 +1,5 @@
 {
-  "updated": "2026-07-23T22:01:06.592494+00:00",
+  "updated": "2026-07-24T16:33:33.261347+00:00",
   "jobs": [
     {
       "id": "3743990014196036",
@@ -88,17 +88,6 @@
       "department": "Fire Department",
       "ref_num": "RTF0161213-01124052",
       "released_date": "2026-06-03T17:37:46.673Z"
-    },
-    {
-      "id": "3743990013242462",
-      "title": "Solutions Architect (9976) - Department of Technology ",
-      "url": "https://jobs.smartrecruiters.com/CityAndCountyOfSanFrancisco1/3743990013242462",
-      "class_code": "9976",
-      "class_label": "9976-Technology Expert I",
-      "employment_type": "Temporary Exempt",
-      "department": "Technology",
-      "ref_num": "REF60481Q",
-      "released_date": "2026-05-20T22:23:59.168Z"
     },
     {
       "id": "3743990012814326",
