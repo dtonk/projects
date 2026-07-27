@@ -138,6 +138,18 @@ export function OpenScreen({ onOpenUrl, onOpenFile, loading, error }: Props) {
           </ul>
         </section>
       )}
+
+      <footer className="mt-auto pt-6 text-center">
+        <a
+          href="https://github.com/dtonk/projects/tree/main/cellsheet"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-xs underline"
+          style={{ color: 'var(--muted)' }}
+        >
+          View source on GitHub
+        </a>
+      </footer>
     </div>
   );
 }
