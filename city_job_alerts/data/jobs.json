@@ -1,6 +1,17 @@
 {
-  "updated": "2026-08-04T22:07:30.156210+00:00",
+  "updated": "2026-08-05T16:27:53.493127+00:00",
   "jobs": [
+    {
+      "id": "3743990014442266",
+      "title": "Hospital Support Services Administrator (0941 Manager VI) - Department of Public Health - (EXEMPT)",
+      "url": "https://jobs.smartrecruiters.com/CityAndCountyOfSanFrancisco1/3743990014442266",
+      "class_code": "0941",
+      "class_label": "0941-Manager VI",
+      "employment_type": "Permanent Exempt",
+      "department": "Public Health",
+      "ref_num": "RTF0157786-01108364",
+      "released_date": "2026-08-04T23:21:50.345Z"
+    },
     {
       "id": "3743990014397751",
       "title": "Chief Financial Officer (0943 Manager VIII) - Department of Public Health",
@@ -22,28 +33,6 @@
       "department": "Homelessness and Supportive Housing",
       "ref_num": "REF60790Q",
       "released_date": "2026-07-31T21:47:12.847Z"
-    },
-    {
-      "id": "3743990014327245",
-      "title": "Capital Finance Director (0941) - Finance division - SFO - (TEX)",
-      "url": "https://jobs.smartrecruiters.com/CityAndCountyOfSanFrancisco1/3743990014327245",
-      "class_code": "0941",
-      "class_label": "0941-Manager VI",
-      "employment_type": "Temporary Exempt",
-      "department": "San Francisco International Airport",
-      "ref_num": "RTF0166278-01107039",
-      "released_date": "2026-07-28T19:02:44.436Z"
-    },
-    {
-      "id": "3743990014196036",
-      "title": "Cybersecurity Engineer\u2013 Administration Division \u2013 SF Municipal Transportation Agency (1044)",
-      "url": "https://jobs.smartrecruiters.com/CityAndCountyOfSanFrancisco1/3743990014196036",
-      "class_code": "1044",
-      "class_label": "1044-IS Engineer-Principal",
-      "employment_type": "Temporary Exempt",
-      "department": "Municipal Transportation Agency",
-      "ref_num": "RTF0166675-01159485",
-      "released_date": "2026-07-21T15:43:53.348Z"
     },
     {
       "id": "3743990014151766",
