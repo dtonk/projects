@@ -1,0 +1,7 @@
+.venv/
+__pycache__/
+*.pyc
+
+# Regenerable via main.py / crawl.py -- large binary blobs not worth
+# versioning. scored_pool_500.csv is the checked-in snapshot of results.
+*.duckdb
