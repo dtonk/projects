@@ -1,3 +1,11 @@
 .DS_Store
 .env
 .ipynb_checkpoints/
+.venv/
+__pycache__/
+warehouse.duckdb
+
+# sf-form700-investors: generated artifacts, rebuilt by the pipeline
+sf-form700-investors/data/
+sf-form700-investors/report.html
+sf-form700-investors/appointed_report.html

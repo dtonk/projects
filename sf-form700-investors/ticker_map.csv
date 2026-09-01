@@ -1,0 +1,302 @@
+entity_or_source,ticker,asset_type,include,note
+"Apple, Inc",AAPL,stock,yes,
+Apple,AAPL,stock,yes,
+Apple INC,AAPL,stock,yes,
+Herc Holdings Inc,HRI,stock,yes,
+Salesforce,CRM,stock,yes,
+Moocho,,private,no,private internet company
+Cibus II,,private_fund,no,private agriculture investment fund
+Transdigm,TDG,stock,yes,
+Cummins,CMI,stock,yes,
+CVC Capital Partners VII,,private_fund,no,private equity fund
+Nextera,NEE,stock,yes,
+Enterprise Product Partners,EPD,stock,yes,MLP
+Amazon,AMZN,stock,yes,
+M&T Bank,MTB,stock,yes,
+Skye Global,,private_fund,no,hedge fund
+Meta,META,stock,yes,
+Ares Special Opportunities Fund II,,private_fund,no,credit fund
+Further,,private,no,private internet company
+Paypal,PYPL,stock,yes,
+Merck,MRK,stock,yes,
+Blackstone Real Estate Partners Europe V,,private_fund,no,real estate fund
+MBN Brands,,private,no,private investment company
+Proctor and Gamble,PG,stock,yes,filer misspelling of Procter & Gamble
+Disney,DIS,stock,yes,
+Mohawk,MHK,stock,yes,Mohawk Industries (flooring); filer described it as construction equipment
+Mighty Squirrel,,private,no,private beverage company
+Seven Springs Partners,,private_fund,no,dementia care fund
+Thor Industries,THO,stock,yes,
+PE Premier Oaktree XI,,private_fund,no,credit fund
+Brookfield Oaktree,,ambiguous,no,"AMBIGUOUS: Oaktree common units went private in 2019; could be BN, BAM, or OAK preferreds. Excluded pending review."
+Truist Financial,TFC,stock,yes,
+Ares Special Opportunities Fund,,private_fund,no,credit fund
+Cibus I,,private_fund,no,private agriculture investment fund
+Simplifeye,,private,no,private internet company
+Home Depot,HD,stock,yes,
+Bridge Debt Strategies III,,private_fund,no,real estate debt fund
+Rumpl,,private,no,private home goods company
+Spoiler Alert,,private,no,private food company
+H&E Equipment,HEES,delisted,no,"acquired by Herc Holdings in 2025; Yahoo has no history for the delisted symbol. Note the filer also holds HRI, the acquirer."
+Best Day Brewing,,private,no,private food company
+BevSpot,,private,no,private internet company
+RealTech,,private,no,private real estate company
+Oaktree Specialty Lending,OCSL,stock,yes,BDC
+Compass Pathways,CMPS,stock,yes,
+Alphabet,GOOGL,stock,yes,
+Microsoft,MSFT,stock,yes,
+Rebecca Allen,,private,no,private home goods company
+Berkshire Hathaway,BRK-B,stock,yes,class B assumed
+Shopify,SHOP,stock,yes,
+Bamboo,,private,no,private marketing company
+CRH,CRH,stock,yes,
+Medtronic,MDT,stock,yes,
+Contenda,,private,no,private technology company
+"SpotMap, Inc.",,private,no,private technology company
+"Amplitude, Inc.",AMPL,stock,yes,
+"Gamma Tech, Inc.",,private,no,private technology company
+Bitcoin,,crypto,no,out of scope - listed equities and ETFs only
+NVIDIA Corp,NVDA,stock,yes,
+iShares Global Clean Energy ETF,ICLN,etf,yes,
+TQQQ,TQQQ,etf,yes,3x leveraged Nasdaq-100 ETF
+V.F. CORPEORATION,VFC,stock,yes,filer misspelling of V.F. Corporation
+Delta Airline,DAL,stock,yes,
+UNITED AIRLINE,UAL,stock,yes,
+ZEVENBERGEN GENEA IVESTOR,ZVGNX,mutual_fund,no,"filer misspelling of Zevenbergen Genea Fund Investor Class; Yahoo serves a live quote but no history at any range, so no return can be computed"
+Hero Shop,,private,no,private retail shop
+Argent Mill,,private,no,private apparel company
+Storr (dba Badge),,private,no,private technology company
+Riveter,,private,no,private technology company
+Caraway (formerly Parfait Kitchen),,private,no,private consumer goods company
+Amgen Inc,AMGN,stock,yes,
+Thermo Fisher Scientific Inc,TMO,stock,yes,
+Blackstone Inc.,BX,stock,yes,
+Nike Inc-Class B,NKE,stock,yes,
+Procter & Gamble Co,PG,stock,yes,
+"Q5iD, Inc.",,private,no,private identity-verification company
+Vertex Pharmaceuticals Inc,VRTX,stock,yes,
+Abbott Labs,ABT,stock,yes,
+Alphabet Inc Cl A,GOOGL,stock,yes,
+Doordash Inc,DASH,stock,yes,IPO Dec 2020
+Constellation Brands Inc,STZ,stock,yes,
+Costco Wholesale Corp New,COST,stock,yes,
+Microsoft Corp,MSFT,stock,yes,
+Accenture Plc Cl A,ACN,stock,yes,
+Cisco Systems Inc,CSCO,stock,yes,
+Johnson & Johnson,JNJ,stock,yes,
+American Tower Corp Reit,AMT,stock,yes,REIT
+Amazon.Com Inc,AMZN,stock,yes,
+Visa Inc Cl A,V,stock,yes,
+Uber Technologies Inc.,UBER,stock,yes,
+Morgan Stanley,MS,stock,yes,
+Blackrock Inc Cl A,BLK,stock,yes,
+Agilent Technologies Inc,A,stock,yes,
+Jp Morgan Chase & Co,JPM,stock,yes,
+Comcast Corp-Cl A,CMCSA,stock,yes,
+Ares Capital Corp,ARCC,stock,yes,BDC
+Tesla Inc,TSLA,stock,yes,
+Cbre Group Inc,CBRE,stock,yes,
+Constellation Energy Corp,CEG,stock,yes,spun off from Exelon Feb 2022 - no 5y history
+Union Pac Corp,UNP,stock,yes,
+Micron Technology Inc,MU,stock,yes,
+Chubb Ltd,CB,stock,yes,
+Lilly Eli & Co,LLY,stock,yes,
+Builders Firstsource Inc,BLDR,stock,yes,
+American Water Works Co Inc,AWK,stock,yes,
+Starbucks Corp,SBUX,stock,yes,
+Adobe Inc,ADBE,stock,yes,
+Cadence Design Systems Inc,CDNS,stock,yes,
+Unitedhealth Group Inc,UNH,stock,yes,
+Roper Technologies Inc,ROP,stock,yes,
+Janus Henderson Aaa Clo Etf,JAAA,etf,yes,"CLO ETF, launched Oct 2020"
+Apple Inc,AAPL,stock,yes,
+Autozone Inc.,AZO,stock,yes,
+Home Depot Inc,HD,stock,yes,
+Exelon Corp,EXC,stock,yes,
+Xylem Inc-W/I,XYL,stock,yes,
+Mastercard Inc Cl A,MA,stock,yes,
+Digital Realty Trust Inc Reit,DLR,stock,yes,REIT
+TJX Cos Inc,TJX,stock,yes,
+Autodesk Inc,ADSK,stock,yes,
+Nvidia Corp.,NVDA,stock,yes,
+Merck & Co Inc,MRK,stock,yes,
+Abbvie Inc,ABBV,stock,yes,
+Nextera Energy Inc,NEE,stock,yes,
+Comfort Systems USA Inc.,FIX,stock,yes,
+Target Corp,TGT,stock,yes,
+Rubrik Inc,RBRK,stock,yes,IPO Apr 2024 - no 5y history
+Viking Holdings Inc,VIK,stock,yes,IPO May 2024 - no 5y history
+GE Aerospace,GE,stock,yes,GE post-breakup
+Dutch Bros Inc,BROS,stock,yes,IPO Sep 2021
+Alphabet Inc,GOOGL,stock,yes,
+"Chipotle Mexican Grill, Inc.",CMG,stock,yes,
+Deckers Outdoor Inc,DECK,stock,yes,
+Concentra Group Holdings,CON,stock,yes,IPO Jul 2024 - no 5y history
+Moderna Inc,MRNA,stock,yes,
+GE Vernova,GEV,stock,yes,spun off from GE Apr 2024 - no 5y history
+"Williams-Sonoma, Inc.",WSM,stock,yes,
+SPDR S&P 500 ETF,SPY,etf,yes,this is the benchmark itself
+ARMOUR Residential REIT,ARR,stock,yes,mortgage REIT
+Ecopetrol S A ADR,EC,stock,yes,Colombian ADR
+Nintendo LTD,NTDOY,stock,yes,ADR
+Dutch Bros Inc.,BROS,stock,yes,IPO Sep 2021
+Lineage Inc,LINE,stock,yes,IPO Jul 2024 - no 5y history
+"The Duckhorn Portfolio, Inc.",NAPA,delisted,no,taken private by Butterfly Equity Dec 2024
+Archer Aviation Inc,ACHR,stock,yes,
+Costco Wholesale Corp,COST,stock,yes,
+New York Times Co,NYT,stock,yes,
+Rocket Lab USA Inc,RKLB,stock,yes,SPAC merger Aug 2021
+Intuitive Machines Inc,LUNR,stock,yes,SPAC merger Feb 2023 - no 5y history
+Nano Nuclear Energy,NNE,stock,yes,IPO May 2024 - no 5y history
+Joby Aviation Inc,JOBY,stock,yes,SPAC merger Aug 2021
+Oxford Square Capital Co,OXSQ,stock,yes,BDC
+AGNC Investment Corp,AGNC,stock,yes,mortgage REIT
+Novo-Nordisk,NVO,stock,yes,ADR
+Dow Inc,DOW,stock,yes,
+Orchid Island Capital Inc,ORC,stock,yes,mortgage REIT
+Kiara Health,,private,no,private health technology company
+"Boom Pay, Inc.",,private,no,private fintech company
+"Meta Platforms, Inc.",META,stock,yes,
+Apple Inc.,AAPL,stock,yes,
+Tesla,TSLA,stock,yes,
+"Meta Platforms, Inc",META,stock,yes,
+LABORATORY CORP AMER HLDGS COM,LH,stock,yes,
+VXUS,VXUS,etf,yes,Vanguard Total International Stock ETF
+FORTREA Holdings Inc,FTRE,stock,yes,spun off from Labcorp Jul 2023 - no 5y history
+Costco Wholesale,COST,stock,yes,
+Eli Lilly and Co.,LLY,stock,yes,
+Sandisk Corporation,SNDK,stock,yes,spun off from Western Digital Feb 2025 - no 5y history
+Western Digital,WDC,stock,yes,
+"Apple, Inc.",AAPL,stock,yes,
+LPL Financial,LPLA,stock,yes,
+Intel,INTC,stock,yes,auto-resolved (medium): Intel Corporation
+Costco,COST,stock,yes,filer wrote a bare ticker or short name; resolver correct but scored low on name similarity
+KKR and Company,KKR,stock,yes,resolver returned the London line
+Visa,V,stock,yes,auto-resolved (medium): Visa Inc.
+Mastercard,MA,stock,yes,auto-resolved (medium): Mastercard Incorporated
+ServiceNow,NOW,stock,yes,"auto-resolved (high): ServiceNow, Inc."
+Nvidia,NVDA,stock,yes,auto-resolved (medium): NVIDIA Corporation
+United Health,UNH,stock,yes,resolver wrongly matched United Health Products
+Ely Lilly,LLY,stock,yes,filer misspelling of Eli Lilly
+Coca Cola Company,KO,stock,yes,auto-resolved (high): The Coca-Cola Company
+O'Reilly Automotive,ORLY,stock,yes,"auto-resolved (high): O'Reilly Automotive, Inc."
+ConocoPhilips,COP,stock,yes,filer misspelling
+Waste Management,WM,stock,yes,"auto-resolved (high): Waste Management, Inc."
+Proctor & Gamble,PG,stock,yes,filer misspelling
+Pfizer,PFE,stock,yes,auto-resolved (high): Pfizer Inc.
+JP Morgan,JPM,stock,yes,auto-resolved (medium): JPMorgan Chase & Co.
+General Motors,GM,stock,yes,auto-resolved (high): General Motors Company
+Wells Fargo,WFC,stock,yes,auto-resolved (medium): Wells Fargo & Company
+General Electric,GE,stock,yes,resolver wrongly matched Portland General Electric
+Procter & Gambel Co,PG,stock,yes,filer misspelling
+Zimmer Biomet Holdings Inc,ZBH,stock,yes,"auto-resolved (high): Zimmer Biomet Holdings, Inc."
+Abbott Laboratories,ABT,stock,yes,auto-resolved (high): Abbott Laboratories
+International Business Machines Corp,IBM,stock,yes,auto-resolved (high): International Business Machines Corporation
+Kimberly Clark Corp,KMB,stock,yes,auto-resolved (high): Kimberly-Clark Corporation
+Jabil Inc,JBL,stock,yes,auto-resolved (high): Jabil Inc.
+Eastman Chemical,EMN,stock,yes,auto-resolved (high): Eastman Chemical Company
+General Electric Co,GE,stock,yes,resolver wrongly matched Portland General Electric
+CSX Corporation,CSX,stock,yes,auto-resolved (high): CSX Corporation
+BNY Mellon,BNY,stock,yes,Bank of New York Mellon; rebranded from BK to BNY
+AMGEN,AMGN,stock,yes,auto-resolved (medium): Amgen Inc.
+Intel Corp,INTC,stock,yes,auto-resolved (high): Intel Corporation
+Dogpatch Venture Fund,,private_fund,no,private AI venture fund
+Berkshire Hathaway B,BRK-B,stock,yes,
+Microstrategy,MSTR,stock,yes,resolver returned the Munich line
+Broadcom,AVGO,stock,yes,auto-resolved (high): Broadcom Inc.
+META,META,stock,yes,filer wrote a bare ticker or short name; resolver correct but scored low on name similarity
+UAL,UAL,stock,yes,filer wrote a bare ticker or short name; resolver correct but scored low on name similarity
+Capital One Financial,COF,stock,yes,auto-resolved (high): Capital One Financial Corporation
+Coeur,CDE,stock,yes,filer wrote a bare ticker or short name; resolver correct but scored low on name similarity
+Klac,KLAC,stock,yes,filer wrote a bare ticker or short name; resolver correct but scored low on name similarity
+Oklo,OKLO,stock,yes,auto-resolved (medium): Oklo Inc.
+Hilton,HLT,stock,yes,"assumed Hilton Worldwide, not Grand Vacations"
+Emcor,EME,stock,yes,"auto-resolved (medium): EMCOR Group, Inc."
+Run,RUN,stock,yes,filer wrote the ticker; Sunrun
+Google,GOOGL,stock,yes,filer wrote the brand name
+Macy's,M,stock,yes,"auto-resolved (medium): Macy's, Inc."
+RTX,RTX,stock,yes,filer wrote a bare ticker or short name; resolver correct but scored low on name similarity
+CLS,CLS,stock,yes,filer wrote a bare ticker or short name; resolver correct but scored low on name similarity
+Goldman Sachs,GS,stock,yes,resolver wrongly matched Goldman Sachs BDC
+Tenet Healthcare,THC,stock,yes,auto-resolved (high): Tenet Healthcare Corporation
+Taiwan Semiconductors,TSM,stock,yes,ADR; resolver returned a German ETP
+Mu,MU,stock,yes,filer wrote a bare ticker or short name; resolver correct but scored low on name similarity
+Crowdstrike,CRWD,stock,yes,"auto-resolved (medium): CrowdStrike Holdings, Inc."
+Sterling,STRL,stock,yes,assumed Sterling Infrastructure
+Fidelity Investments,,money_market,no,filer describes a government money market fund
+JPMORGAN CHASE & CO,JPM,stock,yes,auto-resolved (high): JPMorgan Chase & Co.
+J.P. Morgan Securities LLC,,ambiguous,no,brokerage named as source; filer describes a Janus healthcare fund
+SHELL PLC,SHEL,stock,yes,auto-resolved (high): Shell plc
+TESLA INC,TSLA,stock,yes,"auto-resolved (high): Tesla, Inc."
+Cisco,CSCO,stock,yes,filer wrote a bare ticker or short name; resolver correct but scored low on name similarity
+Novo Nordisk,NVO,stock,yes,auto-resolved (high): Novo Nordisk A/S
+Amazon.com Inc.,AMZN,stock,yes,"auto-resolved (high): Amazon.com, Inc."
+Rivian,RIVN,stock,yes,filer wrote a bare ticker or short name; resolver correct but scored low on name similarity
+Proshares Bitcoin ETF,BITO,etf,yes,auto-resolved (high): ProShares Bitcoin ETF
+Faire Wholesale,,private,no,private wholesale marketplace
+"Nordstrom, Inc.",,delisted,no,taken private in 2025; no continuing price history
+"Pathbrite, Inc.
+580 Howard Street, Suite 401
+San Francisco, CA  94105",,private,no,private company
+3M Company,MMM,stock,yes,auto-resolved (high): 3M Company
+Meta Platforms,META,stock,yes,"auto-resolved (high): Meta Platforms, Inc."
+Merck Corporation,MRK,stock,yes,"auto-resolved (medium): Merck & Co., Inc."
+SPDR S&P Biotech,XBI,etf,yes,auto-resolved (medium): State Street SPDR S&P Biotech ETF
+Prologis Incorporated,PLD,stock,yes,"auto-resolved (medium): Prologis, Inc."
+Microsoft Corporation,MSFT,stock,yes,auto-resolved (high): Microsoft Corporation
+Exxon Mobil Corporation,XOM,stock,yes,auto-resolved (high): ExxonMobil Holdings Corporation
+ASML Holding NV,ASML,stock,yes,auto-resolved (high): ASML Holding N.V.
+Sempra,SRE,stock,yes,auto-resolved (high): Sempra
+Sysco Corporation,SYY,stock,yes,auto-resolved (high): Sysco Corporation
+RTX Corporation,RTX,stock,yes,auto-resolved (high): RTX Corporation
+Tesla Incorporated,TSLA,stock,yes,"auto-resolved (medium): Tesla, Inc."
+Hilton Worldwide Holdings Inc,HLT,stock,yes,"assumed Hilton Worldwide, not Grand Vacations"
+Thermo Fisher Scientific Incorporated,TMO,stock,yes,auto-resolved (high): Thermo Fisher Scientific Inc.
+Costco Wholesale Corporation,COST,stock,yes,auto-resolved (high): Costco Wholesale Corporation
+Salesforce Incorporated,CRM,stock,yes,"auto-resolved (high): Salesforce, Inc."
+Walmart Incorporated,WMT,stock,yes,auto-resolved (medium): Walmart Inc.
+Broadcom Incorporated,AVGO,stock,yes,auto-resolved (high): Broadcom Inc.
+Home Depot Incorporated,HD,stock,yes,"auto-resolved (medium): The Home Depot, Inc."
+Alphabet Incorporated,GOOGL,stock,yes,"class A, consistent with rest of map"
+Amazon Incorporated,AMZN,stock,yes,"auto-resolved (medium): Amazon.com, Inc."
+LVMH Moet Hennessy ADR,LVMUY,stock,yes,ADR
+Wells Fargo & Co,WFC,stock,yes,auto-resolved (high): Wells Fargo & Company
+Freeport-McMoRan Inc.,FCX,stock,yes,auto-resolved (high): Freeport-McMoRan Inc.
+Palo Alto Networks,PANW,stock,yes,"auto-resolved (high): Palo Alto Networks, Inc."
+Mastercard Incorporated,MA,stock,yes,auto-resolved (high): Mastercard Incorporated
+Adobe Incorporated,ADBE,stock,yes,auto-resolved (medium): Adobe Inc.
+Capitol One Financial,COF,stock,yes,filer misspelling of Capital One
+Cisco Systems Incorporated,CSCO,stock,yes,"auto-resolved (high): Cisco Systems, Inc."
+Blackstone Incorporated,BX,stock,yes,auto-resolved (high): Blackstone Inc.
+Becton Dickinson,BDX,stock,yes,"auto-resolved (high): Becton, Dickinson and Company"
+UnitedHealth Group Incorporated,UNH,stock,yes,auto-resolved (high): UnitedHealth Group Incorporated
+Palantir Technologies,PLTR,stock,yes,auto-resolved (high): Palantir Technologies Inc.
+Blackrock Incorporated,BLK,stock,yes,"auto-resolved (high): BlackRock, Inc."
+Nextera Energy Incorporated,NEE,stock,yes,"auto-resolved (high): NextEra Energy, Inc."
+Vertiv Holdings Co,VRT,stock,yes,auto-resolved (high): Vertiv Holdings Co
+KKR & Company Incorporated,KKR,stock,yes,auto-resolved (medium): KKR & Co. Inc.
+Boston Scientific,BSX,stock,yes,auto-resolved (high): Boston Scientific Corporation
+Eaton Corporation,ETN,stock,yes,auto-resolved (high): Eaton Corporation plc
+Mondelez International,MDLZ,stock,yes,"auto-resolved (high): Mondelez International, Inc."
+SPDR Gold Trust,GLD,etf,yes,resolver returned the Mexican line
+Aberdeen Palladium ETF Trust,PALL,etf,yes,physical palladium ETF
+Apple Incorporated,AAPL,stock,yes,auto-resolved (medium): Apple Inc.
+Chevron Corporation,CVX,stock,yes,auto-resolved (high): Chevron Corporation
+AT&T Incorporated,T,stock,yes,auto-resolved (medium): AT&T Inc.
+Eli Lilly & Co,LLY,stock,yes,auto-resolved (high): Eli Lilly and Company
+Valero Energy Corporation,VLO,stock,yes,auto-resolved (high): Valero Energy Corporation
+Conocophillips,COP,stock,yes,auto-resolved (high): ConocoPhillips
+Visa Incorporated,V,stock,yes,auto-resolved (medium): Visa Inc.
+JP Morgan Chase & Company,JPM,stock,yes,auto-resolved (high): JPMorgan Chase & Co.
+McDonalds Corporation,MCD,stock,yes,auto-resolved (high): McDonald's Corporation
+Waste Management Incorporated,WM,stock,yes,"auto-resolved (high): Waste Management, Inc."
+Marvel Technologies Incorporated,MRVL,stock,yes,filer misspelling of Marvell Technology
+AstraZeneca,AZN,stock,yes,auto-resolved (high): AstraZeneca PLC
+Quanta Services Incorporated,PWR,stock,yes,"auto-resolved (high): Quanta Services, Inc."
+ALPHABET INC,GOOGL,stock,yes,"class A, consistent with rest of map"
+META PLATFORMS INC,META,stock,yes,"auto-resolved (high): Meta Platforms, Inc."
+ELI LILLY & CO,LLY,stock,yes,auto-resolved (high): Eli Lilly and Company
+MICROSOFT CORP,MSFT,stock,yes,auto-resolved (high): Microsoft Corporation
+Salesforce.com,CRM,stock,yes,"auto-resolved (high): Salesforce, Inc."
+"Apple, inc.",AAPL,stock,yes,auto-resolved (high): Apple Inc.
+"Amazon, Inc.",AMZN,stock,yes,"auto-resolved (high): Amazon.com, Inc."
