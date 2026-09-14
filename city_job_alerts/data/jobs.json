@@ -1,6 +1,17 @@
 {
-  "updated": "2026-09-13T22:49:01.383486+00:00",
+  "updated": "2026-09-14T19:42:17.247153+00:00",
   "jobs": [
+    {
+      "id": "3743990015242436",
+      "title": "Principal Data Engineer (1044) - Data Enablement - DataSF",
+      "url": "https://jobs.smartrecruiters.com/CityAndCountyOfSanFrancisco1/3743990015242436",
+      "class_code": "1044",
+      "class_label": "1044-IS Engineer-Principal",
+      "employment_type": "Permanent Exempt",
+      "department": "City Administrator",
+      "ref_num": "RTF0165714-01111881",
+      "released_date": "2026-09-14T18:04:01.349Z"
+    },
     {
       "id": "3743990015187946",
       "title": "Real Estate Transactions Manager (0931) - Real Estate Division, Office of City Administrator",
@@ -11,17 +22,6 @@
       "department": "City Administrator",
       "ref_num": "RTF0166429-01148918",
       "released_date": "2026-09-10T19:50:43.760Z"
-    },
-    {
-      "id": "3743990015184726",
-      "title": "Deputy Director of Finance, Administration & Strategy - (Job Code 0951 Exempt) - San Francisco Arts Commission",
-      "url": "https://jobs.smartrecruiters.com/CityAndCountyOfSanFrancisco1/3743990015184726",
-      "class_code": "0951",
-      "class_label": "0951-Deputy Director I",
-      "employment_type": "Permanent Exempt",
-      "department": "Arts Commission",
-      "ref_num": "RTF0166857-01116183",
-      "released_date": "2026-09-10T18:36:05.065Z"
     },
     {
       "id": "3743990015161116",
@@ -77,17 +77,6 @@
       "department": "District Attorney",
       "ref_num": "RTF0167047-01149953",
       "released_date": "2026-08-29T00:09:14.360Z"
-    },
-    {
-      "id": "3743990014859366",
-      "title": "Principal Data Engineer (1044) - Data Enablement - DataSF",
-      "url": "https://jobs.smartrecruiters.com/CityAndCountyOfSanFrancisco1/3743990014859366",
-      "class_code": "1044",
-      "class_label": "1044-IS Engineer-Principal",
-      "employment_type": "Permanent Exempt",
-      "department": "City Administrator",
-      "ref_num": "RTF0165714-01111881",
-      "released_date": "2026-08-25T22:50:28.850Z"
     },
     {
       "id": "3743990014637048",
