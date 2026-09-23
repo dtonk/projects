@@ -1,6 +1,28 @@
 {
-  "updated": "2026-09-23T18:47:00.656209+00:00",
+  "updated": "2026-09-23T23:24:24.125160+00:00",
   "jobs": [
+    {
+      "id": "3743990015624166",
+      "title": "Data Engineer (1042) - Data Enablement - DataSF, Office of City Administrator",
+      "url": "https://jobs.smartrecruiters.com/CityAndCountyOfSanFrancisco1/3743990015624166",
+      "class_code": "1042",
+      "class_label": "1042-IS Engineer-Journey",
+      "employment_type": "Permanent Exempt",
+      "department": "City Administrator",
+      "ref_num": "RTF0167762-01159823",
+      "released_date": "2026-09-23T22:06:34.637Z"
+    },
+    {
+      "id": "3743990015617296",
+      "title": "Principal ServiceNow Implementation Specialist (1054) - Enterprise Applications - Department of Technology",
+      "url": "https://jobs.smartrecruiters.com/CityAndCountyOfSanFrancisco1/3743990015617296",
+      "class_code": "1054",
+      "class_label": "1054-IS Business Analyst-Principal",
+      "employment_type": "Permanent Exempt",
+      "department": "Technology",
+      "ref_num": "RTF0162692-01025034",
+      "released_date": "2026-09-23T19:19:32.031Z"
+    },
     {
       "id": "3743990015584936",
       "title": "Data Enablement Operations Analyst (1052) - DataSF, Office of City Administrator",
