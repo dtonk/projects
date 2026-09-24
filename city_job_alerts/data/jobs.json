@@ -1,6 +1,17 @@
 {
-  "updated": "2026-09-24T18:47:25.176639+00:00",
+  "updated": "2026-09-24T23:43:53.105132+00:00",
   "jobs": [
+    {
+      "id": "3743990015663276",
+      "title": "Real Estate Transactions Manager (0931) - Real Estate Division, Office of City Administrator",
+      "url": "https://jobs.smartrecruiters.com/CityAndCountyOfSanFrancisco1/3743990015663276",
+      "class_code": "0931",
+      "class_label": "0931-Manager III",
+      "employment_type": "Permanent Exempt",
+      "department": "City Administrator",
+      "ref_num": "RTF0166429-01148918",
+      "released_date": "2026-09-24T23:40:21.677Z"
+    },
     {
       "id": "3743990015624166",
       "title": "Data Engineer (1042) - Data Enablement - DataSF, Office of City Administrator",
@@ -79,17 +90,6 @@
       "released_date": "2026-09-17T17:29:39.671Z"
     },
     {
-      "id": "3743990015276225",
-      "title": "Real Estate Transactions Manager (0931) - Real Estate Division, Office of City Administrator",
-      "url": "https://jobs.smartrecruiters.com/CityAndCountyOfSanFrancisco1/3743990015276225",
-      "class_code": "0931",
-      "class_label": "0931-Manager III",
-      "employment_type": "Permanent Exempt",
-      "department": "City Administrator",
-      "ref_num": "RTF0166429-01148918",
-      "released_date": "2026-09-15T19:03:33.931Z"
-    },
-    {
       "id": "3743990015247254",
       "title": "Chief Investment Officer (CIO) - Office of the Treasurer & Tax Collector (0953)",
       "url": "https://jobs.smartrecruiters.com/CityAndCountyOfSanFrancisco1/3743990015247254",
@@ -143,17 +143,6 @@
       "department": "Technology",
       "ref_num": "REF60087O",
       "released_date": "2026-06-26T20:09:18.754Z"
-    },
-    {
-      "id": "3743990013452026",
-      "title": "1042 - Oracle APEX and Python Developer",
-      "url": "https://jobs.smartrecruiters.com/CityAndCountyOfSanFrancisco1/3743990013452026",
-      "class_code": "1042",
-      "class_label": "1042-IS Engineer-Journey",
-      "employment_type": "Temporary Exempt",
-      "department": "Fire Department",
-      "ref_num": "RTF0161213-01124052",
-      "released_date": "2026-06-03T17:37:46.673Z"
     },
     {
       "id": "3743990012814326",
