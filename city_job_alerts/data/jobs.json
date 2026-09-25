@@ -1,6 +1,39 @@
 {
-  "updated": "2026-09-25T19:05:23.722906+00:00",
+  "updated": "2026-09-25T23:45:33.106481+00:00",
   "jobs": [
+    {
+      "id": "3743990015696776",
+      "title": "Senior Data Analytics Engineer (Snowflake/DBT) (1043) - Controller's Office - (168332)",
+      "url": "https://jobs.smartrecruiters.com/CityAndCountyOfSanFrancisco1/3743990015696776",
+      "class_code": "1043",
+      "class_label": "1043-IS Engineer-Senior",
+      "employment_type": "Permanent Exempt",
+      "department": "Controller",
+      "ref_num": "RTF0168331-01159491",
+      "released_date": "2026-09-25T22:41:19.056Z"
+    },
+    {
+      "id": "3743990015696736",
+      "title": "Data Analytics Engineer (Snowflake/DBT) (1042) - Controller's Office - (168329)",
+      "url": "https://jobs.smartrecruiters.com/CityAndCountyOfSanFrancisco1/3743990015696736",
+      "class_code": "1042",
+      "class_label": "1042-IS Engineer-Journey",
+      "employment_type": "Permanent Exempt",
+      "department": "Controller",
+      "ref_num": "RTF0168328-01159490",
+      "released_date": "2026-09-25T22:41:01.267Z"
+    },
+    {
+      "id": "3743990015689836",
+      "title": "Maternal, Child, and Adolescent Health (MCAH) Director (0942 Manager VII)",
+      "url": "https://jobs.smartrecruiters.com/CityAndCountyOfSanFrancisco1/3743990015689836",
+      "class_code": "0942",
+      "class_label": "0942-Manager VII",
+      "employment_type": "Permanent Exempt",
+      "department": "Public Health",
+      "ref_num": "RTF0167410-01111136",
+      "released_date": "2026-09-25T19:45:02.639Z"
+    },
     {
       "id": "3743990015663276",
       "title": "Real Estate Transactions Manager (0931) - Real Estate Division, Office of City Administrator",
