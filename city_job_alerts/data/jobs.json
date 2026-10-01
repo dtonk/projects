@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-01T00:19:04.094463+00:00",
+  "updated": "2026-10-01T20:03:34.217051+00:00",
   "jobs": [
     {
       "id": "3743990015817176",
@@ -88,17 +88,6 @@
       "department": "City Administrator",
       "ref_num": "RTF0166429-01148918",
       "released_date": "2026-09-24T23:40:21.677Z"
-    },
-    {
-      "id": "3743990015624166",
-      "title": "Data Engineer (1042) - Data Enablement - DataSF, Office of City Administrator",
-      "url": "https://jobs.smartrecruiters.com/CityAndCountyOfSanFrancisco1/3743990015624166",
-      "class_code": "1042",
-      "class_label": "1042-IS Engineer-Journey",
-      "employment_type": "Permanent Exempt",
-      "department": "City Administrator",
-      "ref_num": "RTF0167762-01159823",
-      "released_date": "2026-09-23T22:06:34.637Z"
     },
     {
       "id": "3743990015584936",
