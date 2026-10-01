@@ -1,6 +1,17 @@
 {
-  "updated": "2026-09-30T19:46:08.923778+00:00",
+  "updated": "2026-10-01T00:19:04.094463+00:00",
   "jobs": [
+    {
+      "id": "3743990015817176",
+      "title": "Research and Evaluations Lead (1053) - Department of Technology",
+      "url": "https://jobs.smartrecruiters.com/CityAndCountyOfSanFrancisco1/3743990015817176",
+      "class_code": "1053",
+      "class_label": "1053-IS Business Analyst-Senior",
+      "employment_type": "Permanent Exempt",
+      "department": "Technology",
+      "ref_num": "RTF0166916-01156820",
+      "released_date": "2026-10-01T00:09:47.335Z"
+    },
     {
       "id": "3743990015804777",
       "title": "Senior Platform Engineer (9976) \u2013 Department of Technology ",
@@ -11,17 +22,6 @@
       "department": "Technology",
       "ref_num": "REF61100L",
       "released_date": "2026-09-30T18:05:39.086Z"
-    },
-    {
-      "id": "3743990015750836",
-      "title": "Reports & Analytics Principal Business Analyst - Controller's Office (1054) - 168336",
-      "url": "https://jobs.smartrecruiters.com/CityAndCountyOfSanFrancisco1/3743990015750836",
-      "class_code": "1054",
-      "class_label": "1054-IS Business Analyst-Principal",
-      "employment_type": "Temporary Exempt",
-      "department": "Controller",
-      "ref_num": "RTF0168335-01129747",
-      "released_date": "2026-09-28T22:19:01.936Z"
     },
     {
       "id": "3743990015743626",
@@ -132,28 +132,6 @@
       "department": "Adult Probation",
       "ref_num": "RTF0167754-01159411",
       "released_date": "2026-09-21T19:38:00.945Z"
-    },
-    {
-      "id": "3743990015360866",
-      "title": "Research and Evaluations Lead (1053) - Department of Technology",
-      "url": "https://jobs.smartrecruiters.com/CityAndCountyOfSanFrancisco1/3743990015360866",
-      "class_code": "1053",
-      "class_label": "1053-IS Business Analyst-Senior",
-      "employment_type": "Permanent Exempt",
-      "department": "Technology",
-      "ref_num": "RTF0166916-01156820",
-      "released_date": "2026-09-17T21:21:11.335Z"
-    },
-    {
-      "id": "3743990015348959",
-      "title": "1043-Senior Technology Engineer-Salesforce Architect ",
-      "url": "https://jobs.smartrecruiters.com/CityAndCountyOfSanFrancisco1/3743990015348959",
-      "class_code": "1043",
-      "class_label": "1043-IS Engineer-Senior",
-      "employment_type": "Permanent Exempt",
-      "department": "Assessor - Recorder",
-      "ref_num": "RTF0168220-01107222",
-      "released_date": "2026-09-17T17:29:39.671Z"
     },
     {
       "id": "3743990015247254",
