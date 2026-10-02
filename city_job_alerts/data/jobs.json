@@ -1,6 +1,17 @@
 {
-  "updated": "2026-10-02T00:28:45.433438+00:00",
+  "updated": "2026-10-02T19:42:51.464579+00:00",
   "jobs": [
+    {
+      "id": "3743990015869006",
+      "title": "Technology Engineer (1042) - SF Planning Department (CPC)",
+      "url": "https://jobs.smartrecruiters.com/CityAndCountyOfSanFrancisco1/3743990015869006",
+      "class_code": "1042",
+      "class_label": "1042-IS Engineer-Journey",
+      "employment_type": "Permanent Exempt",
+      "department": "City Planning",
+      "ref_num": "RTF0166790-01147953",
+      "released_date": "2026-10-02T18:31:33.623Z"
+    },
     {
       "id": "3743990015849156",
       "title": "Chief Investment Officer (CIO) - Office of the Treasurer & Tax Collector (0953)",
@@ -13,17 +24,6 @@
       "released_date": "2026-10-01T23:12:08.750Z"
     },
     {
-      "id": "3743990015817176",
-      "title": "Research and Evaluations Lead (1053) - Department of Technology",
-      "url": "https://jobs.smartrecruiters.com/CityAndCountyOfSanFrancisco1/3743990015817176",
-      "class_code": "1053",
-      "class_label": "1053-IS Business Analyst-Senior",
-      "employment_type": "Permanent Exempt",
-      "department": "Technology",
-      "ref_num": "RTF0166916-01156820",
-      "released_date": "2026-10-01T00:09:47.335Z"
-    },
-    {
       "id": "3743990015804777",
       "title": "Senior Platform Engineer (9976) \u2013 Department of Technology ",
       "url": "https://jobs.smartrecruiters.com/CityAndCountyOfSanFrancisco1/3743990015804777",
@@ -33,17 +33,6 @@
       "department": "Technology",
       "ref_num": "REF61100L",
       "released_date": "2026-09-30T18:05:39.086Z"
-    },
-    {
-      "id": "3743990015743626",
-      "title": "Technology Engineer (1042) - SF Planning Department (CPC)",
-      "url": "https://jobs.smartrecruiters.com/CityAndCountyOfSanFrancisco1/3743990015743626",
-      "class_code": "1042",
-      "class_label": "1042-IS Engineer-Journey",
-      "employment_type": "Permanent Exempt",
-      "department": "City Planning",
-      "ref_num": "RTF0166790-01147953",
-      "released_date": "2026-09-28T19:36:53.604Z"
     },
     {
       "id": "3743990015732186",
@@ -121,17 +110,6 @@
       "department": "Public Health",
       "ref_num": "REF61048H",
       "released_date": "2026-09-22T15:42:46.136Z"
-    },
-    {
-      "id": "3743990015533637",
-      "title": "DEPUTY DIRECTOR II  RESTORATIVE & PREVENTION SERVICES (0952) (PEX)",
-      "url": "https://jobs.smartrecruiters.com/CityAndCountyOfSanFrancisco1/3743990015533637",
-      "class_code": "0952",
-      "class_label": "0952-Deputy Director II",
-      "employment_type": "Permanent Exempt",
-      "department": "Adult Probation",
-      "ref_num": "RTF0167754-01159411",
-      "released_date": "2026-09-21T19:38:00.945Z"
     },
     {
       "id": "3743990015064486",
