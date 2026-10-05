@@ -1,6 +1,28 @@
 {
-  "updated": "2026-10-04T23:47:25.257063+00:00",
+  "updated": "2026-10-05T21:46:39.523142+00:00",
   "jobs": [
+    {
+      "id": "3743990015903766",
+      "title": "Cloud Engineer (1042) \u2013 Department of Technology",
+      "url": "https://jobs.smartrecruiters.com/CityAndCountyOfSanFrancisco1/3743990015903766",
+      "class_code": "1042",
+      "class_label": "1042-IS Engineer-Journey",
+      "employment_type": "Permanent Exempt",
+      "department": "Technology",
+      "ref_num": "RTF0155031-01134583",
+      "released_date": "2026-10-05T20:38:07.857Z"
+    },
+    {
+      "id": "3743990015899196",
+      "title": "Director of Risk Management (0941) - Risk Management, Office of City Administrator",
+      "url": "https://jobs.smartrecruiters.com/CityAndCountyOfSanFrancisco1/3743990015899196",
+      "class_code": "0941",
+      "class_label": "0941-Manager VI",
+      "employment_type": "Permanent Exempt",
+      "department": "City Administrator",
+      "ref_num": "RTF0167390-01097553",
+      "released_date": "2026-10-05T18:32:22.659Z"
+    },
     {
       "id": "3743990015869006",
       "title": "Technology Engineer (1042) - SF Planning Department (CPC)",
