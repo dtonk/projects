@@ -1,6 +1,39 @@
 {
-  "updated": "2026-10-07T00:19:31.156119+00:00",
+  "updated": "2026-10-07T20:22:49.285426+00:00",
   "jobs": [
+    {
+      "id": "3743990015964606",
+      "title": "IS Business Analyst Senior - Department of Homelessness and Supportive Housing (TEX 1053)",
+      "url": "https://jobs.smartrecruiters.com/CityAndCountyOfSanFrancisco1/3743990015964606",
+      "class_code": "1053",
+      "class_label": "1053-IS Business Analyst-Senior",
+      "employment_type": "Temporary Exempt",
+      "department": "Homelessness and Supportive Housing",
+      "ref_num": "RTF0168310-01160072",
+      "released_date": "2026-10-07T17:18:10.402Z"
+    },
+    {
+      "id": "3743990015964096",
+      "title": "Engineering Manager, Backend (1054) - Systems and Analytics - Department of Human Resources",
+      "url": "https://jobs.smartrecruiters.com/CityAndCountyOfSanFrancisco1/3743990015964096",
+      "class_code": "1054",
+      "class_label": "1054-IS Business Analyst-Principal",
+      "employment_type": "Permanent Exempt",
+      "department": "Human Resources",
+      "ref_num": "RTF0168438-01144712",
+      "released_date": "2026-10-07T17:07:13.126Z"
+    },
+    {
+      "id": "3743990015963996",
+      "title": "IS Senior Technology Engineer - Department of Homelessness and Supportive Housing (TEX 1043)",
+      "url": "https://jobs.smartrecruiters.com/CityAndCountyOfSanFrancisco1/3743990015963996",
+      "class_code": "1043",
+      "class_label": "1043-IS Engineer-Senior",
+      "employment_type": "Temporary Exempt",
+      "department": "Homelessness and Supportive Housing",
+      "ref_num": "RTF0168308-01160071",
+      "released_date": "2026-10-07T17:05:29.110Z"
+    },
     {
       "id": "3743990015903766",
       "title": "Cloud Engineer (1042) \u2013 Department of Technology",
