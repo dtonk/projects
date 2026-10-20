@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-19T20:19:10.651049+00:00",
+  "updated": "2026-10-20T00:04:24.299073+00:00",
   "jobs": [
     {
       "id": "3743990016194756",
@@ -68,17 +68,6 @@
       "released_date": "2026-10-05T20:38:07.857Z"
     },
     {
-      "id": "3743990015869006",
-      "title": "Technology Engineer (1042) - SF Planning Department (CPC)",
-      "url": "https://jobs.smartrecruiters.com/CityAndCountyOfSanFrancisco1/3743990015869006",
-      "class_code": "1042",
-      "class_label": "1042-IS Engineer-Journey",
-      "employment_type": "Permanent Exempt",
-      "department": "City Planning",
-      "ref_num": "RTF0166790-01147953",
-      "released_date": "2026-10-02T18:31:33.623Z"
-    },
-    {
       "id": "3743990015732186",
       "title": "Principal ServiceNow Implementation Specialist (1054) - Enterprise Applications - Department of Technology",
       "url": "https://jobs.smartrecruiters.com/CityAndCountyOfSanFrancisco1/3743990015732186",
@@ -88,28 +77,6 @@
       "department": "Technology",
       "ref_num": "RTF0162692-01025034",
       "released_date": "2026-09-28T15:07:11.941Z"
-    },
-    {
-      "id": "3743990015696776",
-      "title": "Senior Data Analytics Engineer (Snowflake/DBT) (1043) - Controller's Office - (168332)",
-      "url": "https://jobs.smartrecruiters.com/CityAndCountyOfSanFrancisco1/3743990015696776",
-      "class_code": "1043",
-      "class_label": "1043-IS Engineer-Senior",
-      "employment_type": "Permanent Exempt",
-      "department": "Controller",
-      "ref_num": "RTF0168331-01159491",
-      "released_date": "2026-09-25T22:41:19.056Z"
-    },
-    {
-      "id": "3743990015696736",
-      "title": "Data Analytics Engineer (Snowflake/DBT) (1042) - Controller's Office - (168329)",
-      "url": "https://jobs.smartrecruiters.com/CityAndCountyOfSanFrancisco1/3743990015696736",
-      "class_code": "1042",
-      "class_label": "1042-IS Engineer-Journey",
-      "employment_type": "Permanent Exempt",
-      "department": "Controller",
-      "ref_num": "RTF0168328-01159490",
-      "released_date": "2026-09-25T22:41:01.267Z"
     },
     {
       "id": "3743990015689836",
