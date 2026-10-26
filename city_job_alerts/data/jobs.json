@@ -1,16 +1,38 @@
 {
-  "updated": "2026-10-25T22:59:25.935261+00:00",
+  "updated": "2026-10-26T20:15:57.509540+00:00",
   "jobs": [
     {
-      "id": "3743990016194756",
+      "id": "3743990016409656",
+      "title": "UASI Grants and Compliance Manager - Department of Emergency Management (0931)",
+      "url": "https://jobs.smartrecruiters.com/CityAndCountyOfSanFrancisco1/3743990016409656",
+      "class_code": "0931",
+      "class_label": "0931-Manager III",
+      "employment_type": "Permanent Exempt",
+      "department": "Emergency Management",
+      "ref_num": "RTF0169188-01105804",
+      "released_date": "2026-10-26T17:15:49.529Z"
+    },
+    {
+      "id": "3743990016408646",
       "title": "Senior ServiceNow Platform Developer (1043) - Systems and Analytics - Department of Human Resources",
-      "url": "https://jobs.smartrecruiters.com/CityAndCountyOfSanFrancisco1/3743990016194756",
+      "url": "https://jobs.smartrecruiters.com/CityAndCountyOfSanFrancisco1/3743990016408646",
       "class_code": "1043",
       "class_label": "1043-IS Engineer-Senior",
       "employment_type": "Temporary Exempt",
       "department": "Human Resources",
       "ref_num": "RTF0168572-01160101",
-      "released_date": "2026-10-16T23:04:09.291Z"
+      "released_date": "2026-10-26T16:49:59.938Z"
+    },
+    {
+      "id": "3743990016403957",
+      "title": "AI Platform Support Engineer (1042) \u2013Department of Technology",
+      "url": "https://jobs.smartrecruiters.com/CityAndCountyOfSanFrancisco1/3743990016403957",
+      "class_code": "1042",
+      "class_label": "1042-IS Engineer-Journey",
+      "employment_type": "Permanent Exempt",
+      "department": "Technology",
+      "ref_num": "RTF0166928-01156815",
+      "released_date": "2026-10-26T14:41:32.158Z"
     },
     {
       "id": "3743990016006187",
