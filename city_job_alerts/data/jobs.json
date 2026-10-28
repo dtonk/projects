@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-28T00:12:59.078261+00:00",
+  "updated": "2026-10-28T20:01:34.849348+00:00",
   "jobs": [
     {
       "id": "3743990016409656",
@@ -132,17 +132,6 @@
       "department": "City Attorney",
       "ref_num": "RTF0166221-01021123",
       "released_date": "2026-08-17T22:09:00.990Z"
-    },
-    {
-      "id": "3743990013821726",
-      "title": "Principal System Integration Engineer (Enterprise Systems), Oracle BPEL / SOA Integration (1064) \u2013 Department of Technology",
-      "url": "https://jobs.smartrecruiters.com/CityAndCountyOfSanFrancisco1/3743990013821726",
-      "class_code": "1064",
-      "class_label": "1064-IS Programmer Analyst-Principal",
-      "employment_type": "Permanent Exempt",
-      "department": "Technology",
-      "ref_num": "REF60087O",
-      "released_date": "2026-06-26T20:09:18.754Z"
     },
     {
       "id": "3743990012814326",
