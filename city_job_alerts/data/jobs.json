@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-30T19:48:38.040962+00:00",
+  "updated": "2026-10-31T00:18:51.638651+00:00",
   "jobs": [
     {
       "id": "3743990016513996",
@@ -66,17 +66,6 @@
       "department": "City Administrator",
       "ref_num": "RTF0167390-01097553",
       "released_date": "2026-10-07T23:37:52.252Z"
-    },
-    {
-      "id": "3743990015963996",
-      "title": "IS Senior Technology Engineer - Department of Homelessness and Supportive Housing (TEX 1043)",
-      "url": "https://jobs.smartrecruiters.com/CityAndCountyOfSanFrancisco1/3743990015963996",
-      "class_code": "1043",
-      "class_label": "1043-IS Engineer-Senior",
-      "employment_type": "Temporary Exempt",
-      "department": "Homelessness and Supportive Housing",
-      "ref_num": "RTF0168308-01160071",
-      "released_date": "2026-10-07T17:05:29.110Z"
     },
     {
       "id": "3743990015732186",
