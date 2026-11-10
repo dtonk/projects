@@ -1,6 +1,39 @@
 {
-  "updated": "2026-11-10T03:06:50.544202+00:00",
+  "updated": "2026-11-10T21:09:27.309870+00:00",
   "jobs": [
+    {
+      "id": "3743990016774675",
+      "title": "Salesforce Developer - Office of the Assessor-Recorder (1042)",
+      "url": "https://jobs.smartrecruiters.com/CityAndCountyOfSanFrancisco1/3743990016774675",
+      "class_code": "1042",
+      "class_label": "1042-IS Engineer-Journey",
+      "employment_type": "Permanent Exempt",
+      "department": "Assessor - Recorder",
+      "ref_num": "RTF0169379-01139712",
+      "released_date": "2026-11-10T19:52:53.829Z"
+    },
+    {
+      "id": "3743990016774236",
+      "title": "Senior Salesforce Programmer Analyst - Office of the Assessor-Recorder (1053)",
+      "url": "https://jobs.smartrecruiters.com/CityAndCountyOfSanFrancisco1/3743990016774236",
+      "class_code": "1053",
+      "class_label": "1053-IS Business Analyst-Senior",
+      "employment_type": "Permanent Exempt",
+      "department": "Assessor - Recorder",
+      "ref_num": "RTF0169370-01111404",
+      "released_date": "2026-11-10T19:45:40.407Z"
+    },
+    {
+      "id": "3743990016772305",
+      "title": "Senior ServiceNow Platform Developer (1043) - Systems and Analytics - Department of Human Resources",
+      "url": "https://jobs.smartrecruiters.com/CityAndCountyOfSanFrancisco1/3743990016772305",
+      "class_code": "1043",
+      "class_label": "1043-IS Engineer-Senior",
+      "employment_type": "Temporary Exempt",
+      "department": "Human Resources",
+      "ref_num": "RTF0168572-01160101",
+      "released_date": "2026-11-10T19:01:43.677Z"
+    },
     {
       "id": "3743990016736866",
       "title": "Content Designer & User Researcher - 1053",
@@ -44,17 +77,6 @@
       "department": "City Administrator",
       "ref_num": "RTF0167390-01097553",
       "released_date": "2026-11-04T18:34:15.302Z"
-    },
-    {
-      "id": "3743990016566646",
-      "title": "Senior ServiceNow Platform Developer (1043) - Systems and Analytics - Department of Human Resources",
-      "url": "https://jobs.smartrecruiters.com/CityAndCountyOfSanFrancisco1/3743990016566646",
-      "class_code": "1043",
-      "class_label": "1043-IS Engineer-Senior",
-      "employment_type": "Temporary Exempt",
-      "department": "Human Resources",
-      "ref_num": "RTF0168572-01160101",
-      "released_date": "2026-11-02T19:53:44.831Z"
     },
     {
       "id": "3743990016513996",
