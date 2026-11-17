@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-17T03:21:36.774273+00:00",
+  "updated": "2026-11-17T22:45:08.392327+00:00",
   "jobs": [
     {
       "id": "3743990016860186",
@@ -44,17 +44,6 @@
       "department": "Assessor - Recorder",
       "ref_num": "RTF0169370-01111404",
       "released_date": "2026-11-10T19:45:40.407Z"
-    },
-    {
-      "id": "3743990016772305",
-      "title": "Senior ServiceNow Platform Developer (1043) - Systems and Analytics - Department of Human Resources",
-      "url": "https://jobs.smartrecruiters.com/CityAndCountyOfSanFrancisco1/3743990016772305",
-      "class_code": "1043",
-      "class_label": "1043-IS Engineer-Senior",
-      "employment_type": "Temporary Exempt",
-      "department": "Human Resources",
-      "ref_num": "RTF0168572-01160101",
-      "released_date": "2026-11-10T19:01:43.677Z"
     },
     {
       "id": "3743990016736866",
