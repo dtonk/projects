@@ -1,6 +1,50 @@
 {
-  "updated": "2026-11-20T01:59:17.695510+00:00",
+  "updated": "2026-11-20T22:04:58.510358+00:00",
   "jobs": [
+    {
+      "id": "3743990017005526",
+      "title": "PermitSF Permitting Transformation Lead (1054 Technology Analyst/Designer \u2013 Principal)",
+      "url": "https://jobs.smartrecruiters.com/CityAndCountyOfSanFrancisco1/3743990017005526",
+      "class_code": "1054",
+      "class_label": "1054-IS Business Analyst-Principal",
+      "employment_type": "Temporary Exempt",
+      "department": "City Planning",
+      "ref_num": "RTF0169802-01160289",
+      "released_date": "2026-11-20T17:50:22.989Z"
+    },
+    {
+      "id": "3743990017004620",
+      "title": "PermitSF Portal Project Manager (1053 Technology Analyst/Designer-Senior)",
+      "url": "https://jobs.smartrecruiters.com/CityAndCountyOfSanFrancisco1/3743990017004620",
+      "class_code": "1053",
+      "class_label": "1053-IS Business Analyst-Senior",
+      "employment_type": "Temporary Exempt",
+      "department": "City Planning",
+      "ref_num": "RTF0169794-01160287",
+      "released_date": "2026-11-20T17:49:24.968Z"
+    },
+    {
+      "id": "3743990017005256",
+      "title": "PermitSF Permitting Transformation Senior Specialist (1053 Technology Analyst/Designer-Senior)",
+      "url": "https://jobs.smartrecruiters.com/CityAndCountyOfSanFrancisco1/3743990017005256",
+      "class_code": "1053",
+      "class_label": "1053-IS Business Analyst-Senior",
+      "employment_type": "Temporary Exempt",
+      "department": "City Planning",
+      "ref_num": "RTF0169790-01160285",
+      "released_date": "2026-11-20T17:47:34.901Z"
+    },
+    {
+      "id": "3743990017004254",
+      "title": "PermitSF Training & Change Management Lead (1054 Technology Analyst/Designer \u2013 Principal)",
+      "url": "https://jobs.smartrecruiters.com/CityAndCountyOfSanFrancisco1/3743990017004254",
+      "class_code": "1054",
+      "class_label": "1054-IS Business Analyst-Principal",
+      "employment_type": "Temporary Exempt",
+      "department": "City Planning",
+      "ref_num": "RTF0169805-01160290",
+      "released_date": "2026-11-20T17:45:21.816Z"
+    },
     {
       "id": "3743990016946036",
       "title": "Principal Intelligent Transportation Systems Engineer\u2013 Administration Division \u2013 SF Municipal Transportation Agency (9976)",
